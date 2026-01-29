@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SHAMPU</title>
+    <title>SHAMPU Interface - Steampunk Music</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Inter:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -192,7 +192,8 @@
         #overlay-about { top: 80px; left: 50%; transform: translateX(-50%) translateY(20px); width: 420px; }
         #overlay-about.active { transform: translateX(-50%) translateY(0); }
         
-        #overlay-gallery { top: 80px; right: 40px; width: 380px; }
+        /* Ajuste de ancho para mejor disposición de Crushes */
+        #overlay-gallery { top: 70px; right: 40px; width: 400px; max-height: 400px; }
         #overlay-friends { top: 0; right: 0; height: 100%; width: 280px; border-radius: 0 32px 32px 0; }
 
         /* Ecualizador */
@@ -331,50 +332,54 @@
             <button onclick="closeAllOverlays()" class="absolute top-2 right-2 text-gray-500 hover:text-white text-lg">×</button>
         </div>
 
-        <!-- CRUSHES (😍💘) -->
-        <div id="overlay-gallery" class="overlay-panel rounded-2xl p-5 overflow-hidden">
-            <h3 class="text-[var(--gold-primary)] font-bold text-xl mb-4 border-b border-[var(--gold-dark)]/40 pb-2 text-center drop-shadow-[0_0_5px_rgba(212,175,55,0.5)]">😍💘</h3>
-            
-            <div class="grid grid-cols-3 gap-x-2 gap-y-4 overflow-y-auto max-h-[320px] pr-1 custom-scroll overflow-x-hidden">
+        <!-- CRUSHES (Panel Optimizado) -->
+        <div id="overlay-gallery" class="overlay-panel rounded-2xl p-6 overflow-hidden">
+            <div class="grid grid-cols-3 gap-x-3 gap-y-5 overflow-y-auto max-h-[350px] pr-1 custom-scroll overflow-x-hidden pt-2">
+                <!-- Jenna -->
                 <div class="flex flex-col items-center gap-1 group">
-                    <div class="aspect-[3/4] w-full bg-blue-900/20 rounded-lg border border-[var(--gold-dark)]/30 overflow-hidden group-hover:border-[var(--gold-primary)] transition-all shadow-lg">
+                    <div class="aspect-[3/4] w-full bg-blue-900/20 rounded-lg border border-[var(--gold-dark)]/30 overflow-hidden group-hover:border-[var(--gold-primary)] transition-all shadow-xl">
                         <img src="https://xatimg.com/image/Rsmsu0f5osAn.jpg" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" draggable="false">
                     </div>
-                    <span class="text-[10px] text-[var(--gold-primary)] font-bold uppercase tracking-tighter mt-1 truncate w-full text-center">Jenna</span>
+                    <span class="text-[11px] text-[var(--gold-primary)] font-bold uppercase tracking-tight mt-1 truncate w-full text-center">Jenna</span>
                 </div>
+                <!-- Kendall -->
                 <div class="flex flex-col items-center gap-1 group">
-                    <div class="aspect-[3/4] w-full bg-blue-900/20 rounded-lg border border-[var(--gold-dark)]/30 overflow-hidden group-hover:border-[var(--gold-primary)] transition-all shadow-lg">
+                    <div class="aspect-[3/4] w-full bg-blue-900/20 rounded-lg border border-[var(--gold-dark)]/30 overflow-hidden group-hover:border-[var(--gold-primary)] transition-all shadow-xl">
                         <img src="https://xatimg.com/image/InRQtVNrSswB.jpg" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" draggable="false">
                     </div>
-                    <span class="text-[10px] text-[var(--gold-primary)] font-bold uppercase tracking-tighter mt-1 truncate w-full text-center">Kendall</span>
+                    <span class="text-[11px] text-[var(--gold-primary)] font-bold uppercase tracking-tight mt-1 truncate w-full text-center">Kendall</span>
                 </div>
+                <!-- Dua -->
                 <div class="flex flex-col items-center gap-1 group">
-                    <div class="aspect-[3/4] w-full bg-blue-900/20 rounded-lg border border-[var(--gold-dark)]/30 overflow-hidden group-hover:border-[var(--gold-primary)] transition-all shadow-lg">
+                    <div class="aspect-[3/4] w-full bg-blue-900/20 rounded-lg border border-[var(--gold-dark)]/30 overflow-hidden group-hover:border-[var(--gold-primary)] transition-all shadow-xl">
                         <img src="https://xatimg.com/image/3vH7GhzIJctt.jpg" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" draggable="false">
                     </div>
-                    <span class="text-[10px] text-[var(--gold-primary)] font-bold uppercase tracking-tighter mt-1 truncate w-full text-center">Dua</span>
+                    <span class="text-[11px] text-[var(--gold-primary)] font-bold uppercase tracking-tight mt-1 truncate w-full text-center">Dua</span>
                 </div>
+                <!-- Lily -->
                 <div class="flex flex-col items-center gap-1 group">
-                    <div class="aspect-[3/4] w-full bg-blue-900/20 rounded-lg border border-[var(--gold-dark)]/30 overflow-hidden group-hover:border-[var(--gold-primary)] transition-all shadow-lg">
+                    <div class="aspect-[3/4] w-full bg-blue-900/20 rounded-lg border border-[var(--gold-dark)]/30 overflow-hidden group-hover:border-[var(--gold-primary)] transition-all shadow-xl">
                         <img src="https://xatimg.com/image/sDMh50mB3nZy.jpg" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" draggable="false">
                     </div>
-                    <span class="text-[10px] text-[var(--gold-primary)] font-bold uppercase tracking-tighter mt-1 truncate w-full text-center">Lily</span>
+                    <span class="text-[11px] text-[var(--gold-primary)] font-bold uppercase tracking-tight mt-1 truncate w-full text-center">Lily</span>
                 </div>
+                <!-- Deva -->
                 <div class="flex flex-col items-center gap-1 group">
-                    <div class="aspect-[3/4] w-full bg-blue-900/20 rounded-lg border border-[var(--gold-dark)]/30 overflow-hidden group-hover:border-[var(--gold-primary)] transition-all shadow-lg">
+                    <div class="aspect-[3/4] w-full bg-blue-900/20 rounded-lg border border-[var(--gold-dark)]/30 overflow-hidden group-hover:border-[var(--gold-primary)] transition-all shadow-xl">
                         <img src="https://xatimg.com/image/oIMvJRnsC6P3.jpg" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" draggable="false">
                     </div>
-                    <span class="text-[10px] text-[var(--gold-primary)] font-bold uppercase tracking-tighter mt-1 truncate w-full text-center">Deva</span>
+                    <span class="text-[11px] text-[var(--gold-primary)] font-bold uppercase tracking-tight mt-1 truncate w-full text-center">Deva</span>
                 </div>
+                <!-- Daniela -->
                 <div class="flex flex-col items-center gap-1 group">
-                    <div class="aspect-[3/4] w-full bg-blue-900/20 rounded-lg border border-[var(--gold-dark)]/30 overflow-hidden group-hover:border-[var(--gold-primary)] transition-all shadow-lg">
+                    <div class="aspect-[3/4] w-full bg-blue-900/20 rounded-lg border border-[var(--gold-dark)]/30 overflow-hidden group-hover:border-[var(--gold-primary)] transition-all shadow-xl">
                         <img src="https://xatimg.com/image/mwBrMYD2H8sU.jpg" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" draggable="false">
                     </div>
-                    <span class="text-[10px] text-[var(--gold-primary)] font-bold uppercase tracking-tighter mt-1 truncate w-full text-center">Daniela</span>
+                    <span class="text-[11px] text-[var(--gold-primary)] font-bold uppercase tracking-tight mt-1 truncate w-full text-center">Daniela</span>
                 </div>
             </div>
             
-            <button onclick="closeAllOverlays()" class="absolute top-2 right-2 text-gray-500 hover:text-white text-lg">×</button>
+            <button onclick="closeAllOverlays()" class="absolute top-3 right-3 text-gray-400 hover:text-white text-lg">×</button>
         </div>
 
         <!-- ALIADOS -->
@@ -414,45 +419,19 @@
 
     <script>
         // --- PROTECCIÓN DEL SITIO ---
-        // Deshabilitar Menú de Clic Derecho
         document.addEventListener('contextmenu', event => event.preventDefault());
-
-        // Deshabilitar Comandos de Teclado (F12, Ctrl+U, Ctrl+Shift+I, etc)
         document.addEventListener('keydown', function(e) {
-            // F12
-            if (e.keyCode == 123) {
-                e.preventDefault();
-                return false;
-            }
-            // Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+Shift+C
-            if (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 74 || e.keyCode == 67)) {
-                e.preventDefault();
-                return false;
-            }
-            // Ctrl+U (Ver fuente)
-            if (e.ctrlKey && e.keyCode == 85) {
-                e.preventDefault();
-                return false;
-            }
-            // Ctrl+S (Guardar)
-            if (e.ctrlKey && e.keyCode == 83) {
+            if (e.keyCode == 123 || (e.ctrlKey && e.shiftKey && [73, 74, 67].includes(e.keyCode)) || (e.ctrlKey && [85, 83].includes(e.keyCode))) {
                 e.preventDefault();
                 return false;
             }
         });
-
-        // Deshabilitar arrastre de imágenes global
-        document.addEventListener('dragstart', function(e) {
-            if (e.target.nodeName === 'IMG') {
-                e.preventDefault();
-            }
-        });
+        document.addEventListener('dragstart', function(e) { if (e.target.nodeName === 'IMG') e.preventDefault(); });
 
         const audio = new Audio();
         audio.crossOrigin = "anonymous";
         let isPlaying = false;
         let currentSongIndex = 0;
-        
         let audioCtx, analyser, source, dataArray;
         let visualizerInitialized = false;
 
@@ -503,12 +482,9 @@
                 const div = document.createElement('div');
                 div.className = `song-row flex items-center p-2 mb-1 cursor-pointer ${isActive ? 'active' : ''}`;
                 if (isActive) div.id = "active-row";
-                
                 div.innerHTML = `
                     <div class="w-8 flex justify-center text-[10px] font-mono text-[var(--gold-dark)]">
-                        ${isActive && isPlaying 
-                            ? '<div class="equalizer active-eq-container"><div class="bar"></div><div class="bar"></div><div class="bar"></div></div>' 
-                            : (index + 1)}
+                        ${isActive && isPlaying ? '<div class="equalizer active-eq-container"><div class="bar"></div><div class="bar"></div><div class="bar"></div></div>' : (index + 1)}
                     </div>
                     <img src="${song.cover}" class="w-8 h-8 rounded mx-2 object-cover border border-white/5" draggable="false">
                     <div class="flex-1 overflow-hidden text-left">
@@ -517,17 +493,11 @@
                     </div>
                     <div class="text-[9px] text-gray-500 font-mono pr-2">${song.duration}</div>
                 `;
-                div.onclick = () => {
-                    if (index === currentSongIndex) togglePlay();
-                    else playSong(index);
-                };
+                div.onclick = () => { if (index === currentSongIndex) togglePlay(); else playSong(index); };
                 playlistContainer.appendChild(div);
             });
-
             const activeRow = document.getElementById('active-row');
-            if (activeRow) {
-                activeRow.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }
+            if (activeRow) activeRow.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
 
         function loadSong(index) {
@@ -549,11 +519,10 @@
                 source.connect(analyser);
                 analyser.connect(audioCtx.destination);
                 analyser.fftSize = 64;
-                const bufferLength = analyser.frequencyBinCount;
-                dataArray = new Uint8Array(bufferLength);
+                dataArray = new Uint8Array(analyser.frequencyBinCount);
                 visualizerInitialized = true;
                 animateVisualizer();
-            } catch(e) { console.log("AudioContext could not start", e); }
+            } catch(e) { console.log("AudioContext error", e); }
         }
 
         function animateVisualizer() {
@@ -573,7 +542,7 @@
             loadSong(index);
             initAudioVisualizer();
             if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
-            audio.play().catch(e => console.log("Play error:", e));
+            audio.play();
             isPlaying = true;
             updateUI();
         }
@@ -581,48 +550,27 @@
         function togglePlay() {
             initAudioVisualizer();
             if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
-            if (isPlaying) {
-                audio.pause();
-                isPlaying = false;
-            } else {
-                audio.play().catch(e => console.log("Play error:", e));
-                isPlaying = true;
-            }
+            if (isPlaying) { audio.pause(); isPlaying = false; }
+            else { audio.play(); isPlaying = true; }
             updateUI();
         }
 
-        function prevSong() {
-            currentSongIndex = (currentSongIndex - 1 + songs.length) % songs.length;
-            playSong(currentSongIndex);
-        }
-
-        function nextSong() {
-            currentSongIndex = (currentSongIndex + 1) % songs.length;
-            playSong(currentSongIndex);
-        }
-
+        function prevSong() { playSong((currentSongIndex - 1 + songs.length) % songs.length); }
+        function nextSong() { playSong((currentSongIndex + 1) % songs.length); }
         function updateUI() {
             playPauseBtn.innerHTML = isPlaying ? '<i class="fas fa-pause text-xs"></i>' : '<i class="fas fa-play text-xs ml-0.5"></i>';
             renderPlaylist();
         }
 
         audio.addEventListener('timeupdate', () => {
-            const { currentTime, duration } = audio;
-            if (isNaN(duration)) return;
-            const progress = (currentTime / duration) * 100;
+            const progress = (audio.currentTime / audio.duration) * 100;
             progressFill.style.width = progress + '%';
-            currentTimeEl.textContent = formatTime(currentTime);
-            totalTimeEl.textContent = formatTime(duration);
+            currentTimeEl.textContent = formatTime(audio.currentTime);
+            totalTimeEl.textContent = formatTime(audio.duration);
         });
-
         audio.addEventListener('ended', nextSong);
-
         progressContainer.addEventListener('click', (e) => {
-            if (!audio.duration) return;
-            const rect = progressContainer.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const width = rect.width;
-            const percentage = x / width;
+            const percentage = (e.clientX - progressContainer.getBoundingClientRect().left) / progressContainer.offsetWidth;
             audio.currentTime = percentage * audio.duration;
         });
 
@@ -633,22 +581,17 @@
             overlays.forEach(o => o.classList.remove('active'));
             if (!isActive) target.classList.add('active');
         }
-
-        function closeAllOverlays() {
-            document.querySelectorAll('.overlay-panel').forEach(o => o.classList.remove('active'));
-        }
-
+        function closeAllOverlays() { document.querySelectorAll('.overlay-panel').forEach(o => o.classList.remove('active')); }
         function updateClock() {
             const now = new Date();
             document.getElementById('clock-display').textContent = now.getHours().toString().padStart(2, '0') + ":" + now.getMinutes().toString().padStart(2, '0');
         }
-
         function formatTime(sec) {
+            if (isNaN(sec)) return "0:00";
             const m = Math.floor(sec / 60);
             const s = Math.floor(sec % 60);
             return `${m}:${s < 10 ? '0' : ''}${s}`;
         }
-
         init();
     </script>
 </body>
