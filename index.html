@@ -27,6 +27,9 @@
             margin: 0;
             overflow: hidden;
             color: white;
+            /* Deshabilitar selección de texto para mayor protección */
+            user-select: none;
+            -webkit-user-select: none;
         }
 
         /* Contenedor móvil - Paisaje con brillo ambiental */
@@ -80,7 +83,6 @@
             width: auto;
             object-fit: contain;
             object-position: bottom;
-            /* Filtro de brillo dorado y sombra profunda */
             filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.6)) drop-shadow(15px 0 25px rgba(0,0,0,0.9));
             animation: floatChar 5s ease-in-out infinite;
         }
@@ -100,7 +102,7 @@
             animation: shine 4s linear infinite;
             letter-spacing: 4px;
             font-style: italic;
-            padding-right: 15px; /* Evita el recorte a la derecha */
+            padding-right: 15px;
         }
 
         @keyframes shine {
@@ -242,7 +244,7 @@
         .custom-scroll::-webkit-scrollbar-thumb { background: var(--gold-dark); border-radius: 10px; }
     </style>
 </head>
-<body>
+<body oncontextmenu="return false" ondragstart="return false">
 
     <div class="mobile-frame" id="main-frame">
         <i class="fas fa-cog bg-gear"></i>
@@ -250,7 +252,6 @@
         <nav class="flex justify-between items-center px-10 pt-6 pb-3 z-50 w-full glass-panel absolute top-0 rounded-t-[32px]">
             <div class="text-3xl shampu-text font-bold tracking-tighter uppercase">SHAMPU</div>
             <div class="flex gap-8">
-                <!-- Botones ahora dorados por defecto -->
                 <button onclick="toggleOverlay('overlay-about')" class="text-[10px] font-bold text-[var(--gold-primary)] hover:text-[var(--gold-light)] transition-colors tracking-[0.2em] uppercase">Sobre Mí</button>
                 <button onclick="toggleOverlay('overlay-gallery')" class="text-[10px] font-bold text-[var(--gold-primary)] hover:text-[var(--gold-light)] transition-colors tracking-[0.2em] uppercase">Crushes</button>
                 <button onclick="toggleOverlay('overlay-friends')" class="text-[10px] font-bold text-[var(--gold-primary)] hover:text-[var(--gold-light)] transition-colors tracking-[0.2em] uppercase">Aliados</button>
@@ -258,12 +259,10 @@
         </nav>
 
         <div class="main-char-container">
-            <!-- Imagen con Glow Mejorado -->
-            <img src="https://xatimg.com/image/blnyN6shCImG.png" alt="Personaje SHAMPU" class="main-char">
+            <img src="https://xatimg.com/image/blnyN6shCImG.png" alt="Personaje SHAMPU" class="main-char" draggable="false">
         </div>
 
         <div class="app-container">
-            <!-- Playlist ahora en color dorado -->
             <div class="flex justify-between items-end h-12 mb-4 text-left">
                 <h1 class="text-2xl font-bold text-[var(--gold-primary)] tracking-wide uppercase italic drop-shadow-[0_0_8px_rgba(212,175,55,0.4)]">Playlist</h1>
                 <div class="text-[10px] text-gray-400 font-mono mb-1" id="clock-display">00:00</div>
@@ -273,7 +272,7 @@
 
             <div class="glass-panel rounded-xl p-3 flex flex-col gap-2 mt-auto border-t-2 border-[var(--gold-dark)] shadow-2xl">
                 <div class="flex items-center gap-4 text-left">
-                    <img id="player-cover" src="" class="w-10 h-10 rounded border border-[var(--gold-dark)] object-cover shadow-lg">
+                    <img id="player-cover" src="" class="w-10 h-10 rounded border border-[var(--gold-dark)] object-cover shadow-lg" draggable="false">
                     <div class="flex-1 overflow-hidden">
                         <h4 id="player-title" class="text-xs font-bold truncate">Cargando...</h4>
                         <p id="player-artist" class="text-[10px] text-gray-400 truncate">Sincronizando engranajes</p>
@@ -300,13 +299,13 @@
         <div id="overlay-about" class="overlay-panel rounded-2xl p-6 text-white overflow-hidden">
             <div class="flex gap-4 items-center mb-6 border-b border-[var(--gold-dark)]/40 pb-5 text-left">
                 <div class="w-24 h-24 flex-shrink-0 rounded-lg border-2 border-[var(--gold-primary)] overflow-hidden shadow-[0_0_20px_rgba(212,175,55,0.4)]">
-                    <img src="https://xatimg.com/image/g5kWCW8oBuH8.png" class="w-full h-full object-cover">
+                    <img src="https://xatimg.com/image/g5kWCW8oBuH8.png" class="w-full h-full object-cover" draggable="false">
                 </div>
                 <div class="text-left flex-1">
                     <h3 class="text-[var(--gold-primary)] font-bold text-3xl italic leading-none mb-1">LADY</h3>
                     <div class="flex items-center gap-2">
                         <span class="ecuagod-effect text-xs font-black tracking-widest uppercase">ECUAGOD</span>
-                        <img src="https://cdn-icons-png.flaticon.com/256/8603/8603086.png" class="w-5 h-5 object-contain">
+                        <img src="https://cdn-icons-png.flaticon.com/256/8603/8603086.png" class="w-5 h-5 object-contain" draggable="false">
                     </div>
                     <div class="mt-4 text-sm text-white font-medium leading-tight">
                         Perreo pa lo nene, perreo pa la nena
@@ -337,45 +336,39 @@
             <h3 class="text-[var(--gold-primary)] font-bold text-xl mb-4 border-b border-[var(--gold-dark)]/40 pb-2 text-center drop-shadow-[0_0_5px_rgba(212,175,55,0.5)]">😍💘</h3>
             
             <div class="grid grid-cols-3 gap-x-2 gap-y-4 overflow-y-auto max-h-[320px] pr-1 custom-scroll overflow-x-hidden">
-                <!-- Jenna -->
                 <div class="flex flex-col items-center gap-1 group">
                     <div class="aspect-[3/4] w-full bg-blue-900/20 rounded-lg border border-[var(--gold-dark)]/30 overflow-hidden group-hover:border-[var(--gold-primary)] transition-all shadow-lg">
-                        <img src="https://xatimg.com/image/Rsmsu0f5osAn.jpg" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                        <img src="https://xatimg.com/image/Rsmsu0f5osAn.jpg" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" draggable="false">
                     </div>
                     <span class="text-[10px] text-[var(--gold-primary)] font-bold uppercase tracking-tighter mt-1 truncate w-full text-center">Jenna</span>
                 </div>
-                <!-- Kendall -->
                 <div class="flex flex-col items-center gap-1 group">
                     <div class="aspect-[3/4] w-full bg-blue-900/20 rounded-lg border border-[var(--gold-dark)]/30 overflow-hidden group-hover:border-[var(--gold-primary)] transition-all shadow-lg">
-                        <img src="https://xatimg.com/image/InRQtVNrSswB.jpg" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                        <img src="https://xatimg.com/image/InRQtVNrSswB.jpg" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" draggable="false">
                     </div>
                     <span class="text-[10px] text-[var(--gold-primary)] font-bold uppercase tracking-tighter mt-1 truncate w-full text-center">Kendall</span>
                 </div>
-                <!-- Dua -->
                 <div class="flex flex-col items-center gap-1 group">
                     <div class="aspect-[3/4] w-full bg-blue-900/20 rounded-lg border border-[var(--gold-dark)]/30 overflow-hidden group-hover:border-[var(--gold-primary)] transition-all shadow-lg">
-                        <img src="https://xatimg.com/image/3vH7GhzIJctt.jpg" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                        <img src="https://xatimg.com/image/3vH7GhzIJctt.jpg" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" draggable="false">
                     </div>
                     <span class="text-[10px] text-[var(--gold-primary)] font-bold uppercase tracking-tighter mt-1 truncate w-full text-center">Dua</span>
                 </div>
-                <!-- Lily -->
                 <div class="flex flex-col items-center gap-1 group">
                     <div class="aspect-[3/4] w-full bg-blue-900/20 rounded-lg border border-[var(--gold-dark)]/30 overflow-hidden group-hover:border-[var(--gold-primary)] transition-all shadow-lg">
-                        <img src="https://xatimg.com/image/sDMh50mB3nZy.jpg" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                        <img src="https://xatimg.com/image/sDMh50mB3nZy.jpg" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" draggable="false">
                     </div>
                     <span class="text-[10px] text-[var(--gold-primary)] font-bold uppercase tracking-tighter mt-1 truncate w-full text-center">Lily</span>
                 </div>
-                <!-- Deva -->
                 <div class="flex flex-col items-center gap-1 group">
                     <div class="aspect-[3/4] w-full bg-blue-900/20 rounded-lg border border-[var(--gold-dark)]/30 overflow-hidden group-hover:border-[var(--gold-primary)] transition-all shadow-lg">
-                        <img src="https://xatimg.com/image/oIMvJRnsC6P3.jpg" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                        <img src="https://xatimg.com/image/oIMvJRnsC6P3.jpg" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" draggable="false">
                     </div>
                     <span class="text-[10px] text-[var(--gold-primary)] font-bold uppercase tracking-tighter mt-1 truncate w-full text-center">Deva</span>
                 </div>
-                <!-- Daniela -->
                 <div class="flex flex-col items-center gap-1 group">
                     <div class="aspect-[3/4] w-full bg-blue-900/20 rounded-lg border border-[var(--gold-dark)]/30 overflow-hidden group-hover:border-[var(--gold-primary)] transition-all shadow-lg">
-                        <img src="https://xatimg.com/image/mwBrMYD2H8sU.jpg" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                        <img src="https://xatimg.com/image/mwBrMYD2H8sU.jpg" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" draggable="false">
                     </div>
                     <span class="text-[10px] text-[var(--gold-primary)] font-bold uppercase tracking-tighter mt-1 truncate w-full text-center">Daniela</span>
                 </div>
@@ -390,27 +383,27 @@
             <div class="flex flex-col gap-4 overflow-y-auto pr-2 friends-list">
                 <a href="https://xat.me/xMelanie" target="_blank" class="flex items-center gap-3 justify-end group cursor-pointer">
                     <div class="text-right"><div class="text-[11px] font-bold text-[var(--gold-primary)] group-hover:text-[var(--gold-light)] transition-colors">Mel</div><div class="text-[8px] text-blue-400">@xMelanie</div></div>
-                    <div class="w-10 h-10 rounded-full border border-[var(--gold-dark)] overflow-hidden shadow-lg"><img src="https://xatimg.com/image/mmJI6iAzrWZA.jpg" class="w-full h-full object-cover"></div>
+                    <div class="w-10 h-10 rounded-full border border-[var(--gold-dark)] overflow-hidden shadow-lg"><img src="https://xatimg.com/image/mmJI6iAzrWZA.jpg" class="w-full h-full object-cover" draggable="false"></div>
                 </a>
                 <a href="https://xat.me/Lookatmekissme" target="_blank" class="flex items-center gap-3 justify-end group cursor-pointer">
                     <div class="text-right"><div class="text-[11px] font-bold text-[var(--gold-primary)] group-hover:text-[var(--gold-light)] transition-colors">Valerie</div><div class="text-[8px] text-blue-400">@Lookatmekissme</div></div>
-                    <div class="w-10 h-10 rounded-full border border-[var(--gold-dark)] overflow-hidden shadow-lg"><img src="https://xatimg.com/image/SEfM9tyRrCXF.png" class="w-full h-full object-cover"></div>
+                    <div class="w-10 h-10 rounded-full border border-[var(--gold-dark)] overflow-hidden shadow-lg"><img src="https://xatimg.com/image/SEfM9tyRrCXF.png" class="w-full h-full object-cover" draggable="false"></div>
                 </a>
                 <a href="https://xat.me/Nami" target="_blank" class="flex items-center gap-3 justify-end group cursor-pointer">
                     <div class="text-right"><div class="text-[11px] font-bold text-[var(--gold-primary)] group-hover:text-[var(--gold-light)] transition-colors">Kyma</div><div class="text-[8px] text-blue-400">@Nami</div></div>
-                    <div class="w-10 h-10 rounded-full border border-[var(--gold-dark)] overflow-hidden shadow-lg"><img src="https://xatimg.com/image/KIezHHgTv4kG.png" class="w-full h-full object-cover"></div>
+                    <div class="w-10 h-10 rounded-full border border-[var(--gold-dark)] overflow-hidden shadow-lg"><img src="https://xatimg.com/image/KIezHHgTv4kG.png" class="w-full h-full object-cover" draggable="false"></div>
                 </a>
                 <a href="https://xat.me/shironogame" target="_blank" class="flex items-center gap-3 justify-end group cursor-pointer">
                     <div class="text-right"><div class="text-[11px] font-bold text-[var(--gold-primary)] group-hover:text-[var(--gold-light)] transition-colors">Fem</div><div class="text-[8px] text-blue-400">@shironogame</div></div>
-                    <div class="w-10 h-10 rounded-full border border-[var(--gold-dark)] overflow-hidden shadow-lg"><img src="https://xatimg.com/image/uMKEOp0Od1xm.jpg" class="w-full h-full object-cover"></div>
+                    <div class="w-10 h-10 rounded-full border border-[var(--gold-dark)] overflow-hidden shadow-lg"><img src="https://xatimg.com/image/uMKEOp0Od1xm.jpg" class="w-full h-full object-cover" draggable="false"></div>
                 </a>
                 <a href="https://xat.me/Cobain" target="_blank" class="flex items-center gap-3 justify-end group cursor-pointer">
                     <div class="text-right"><div class="text-[11px] font-bold text-[var(--gold-primary)] group-hover:text-[var(--gold-light)] transition-colors">Jean</div><div class="text-[8px] text-blue-400">@Cobain</div></div>
-                    <div class="w-10 h-10 rounded-full border border-[var(--gold-dark)] overflow-hidden shadow-lg"><img src="https://xatimg.com/image/rj1xIaMGxAAf.jpg" class="w-full h-full object-cover"></div>
+                    <div class="w-10 h-10 rounded-full border border-[var(--gold-dark)] overflow-hidden shadow-lg"><img src="https://xatimg.com/image/rj1xIaMGxAAf.jpg" class="w-full h-full object-cover" draggable="false"></div>
                 </a>
                 <a href="https://xat.me/ShanksAkagamii" target="_blank" class="flex items-center gap-3 justify-end group cursor-pointer">
                     <div class="text-right"><div class="text-[11px] font-bold text-[var(--gold-primary)] group-hover:text-[var(--gold-light)] transition-colors">Plebe</div><div class="text-[8px] text-blue-400">@ShanksAkagamii</div></div>
-                    <div class="w-10 h-10 rounded-full border border-[var(--gold-dark)] overflow-hidden shadow-lg"><img src="https://xatimg.com/image/0AdLHKRLvghV.jpg" class="w-full h-full object-cover"></div>
+                    <div class="w-10 h-10 rounded-full border border-[var(--gold-dark)] overflow-hidden shadow-lg"><img src="https://xatimg.com/image/0AdLHKRLvghV.jpg" class="w-full h-full object-cover" draggable="false"></div>
                 </a>
             </div>
             <button onclick="closeAllOverlays()" class="absolute top-4 left-4 text-[var(--gold-primary)] text-xl"><i class="fas fa-times"></i></button>
@@ -420,6 +413,41 @@
     </div>
 
     <script>
+        // --- PROTECCIÓN DEL SITIO ---
+        // Deshabilitar Menú de Clic Derecho
+        document.addEventListener('contextmenu', event => event.preventDefault());
+
+        // Deshabilitar Comandos de Teclado (F12, Ctrl+U, Ctrl+Shift+I, etc)
+        document.addEventListener('keydown', function(e) {
+            // F12
+            if (e.keyCode == 123) {
+                e.preventDefault();
+                return false;
+            }
+            // Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+Shift+C
+            if (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 74 || e.keyCode == 67)) {
+                e.preventDefault();
+                return false;
+            }
+            // Ctrl+U (Ver fuente)
+            if (e.ctrlKey && e.keyCode == 85) {
+                e.preventDefault();
+                return false;
+            }
+            // Ctrl+S (Guardar)
+            if (e.ctrlKey && e.keyCode == 83) {
+                e.preventDefault();
+                return false;
+            }
+        });
+
+        // Deshabilitar arrastre de imágenes global
+        document.addEventListener('dragstart', function(e) {
+            if (e.target.nodeName === 'IMG') {
+                e.preventDefault();
+            }
+        });
+
         const audio = new Audio();
         audio.crossOrigin = "anonymous";
         let isPlaying = false;
@@ -482,7 +510,7 @@
                             ? '<div class="equalizer active-eq-container"><div class="bar"></div><div class="bar"></div><div class="bar"></div></div>' 
                             : (index + 1)}
                     </div>
-                    <img src="${song.cover}" class="w-8 h-8 rounded mx-2 object-cover border border-white/5">
+                    <img src="${song.cover}" class="w-8 h-8 rounded mx-2 object-cover border border-white/5" draggable="false">
                     <div class="flex-1 overflow-hidden text-left">
                         <div class="text-[11px] font-bold truncate ${isActive ? 'text-[var(--gold-primary)]' : 'text-white'}">${song.title}</div>
                         <div class="text-[9px] text-gray-500 truncate">${song.artist}</div>
