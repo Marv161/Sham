@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sham Interface - Steampunk Music</title>
+    <title>Sham</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Inter:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -61,7 +61,7 @@
             to { transform: rotate(360deg); }
         }
 
-        /* Contenedor del personaje principal - Movido 10% a la derecha (ajuste de -180px a -90px aprox) */
+        /* Contenedor del personaje principal */
         .main-char-container {
             position: absolute;
             bottom: 0;
@@ -177,14 +177,13 @@
             transform: translateY(0);
         }
 
-        /* Tamaño restaurado a 420px */
         #overlay-about { top: 80px; left: 50%; transform: translateX(-50%) translateY(20px); width: 420px; }
         #overlay-about.active { transform: translateX(-50%) translateY(0); }
         
         #overlay-gallery { top: 80px; right: 40px; width: 350px; }
         #overlay-friends { top: 0; right: 0; height: 100%; width: 280px; border-radius: 0 32px 32px 0; }
 
-        /* Ecualizador */
+        /* Ecualizador - Controlado por JS */
         .equalizer {
             display: flex;
             align-items: flex-end;
@@ -193,10 +192,10 @@
         }
         .bar {
             width: 2px;
+            height: 20%;
             background-color: var(--gold-primary);
-            animation: bounce 1s infinite ease-in-out;
+            transition: height 0.1s ease; /* Transición suave para el Analyser */
         }
-        @keyframes bounce { 0%, 100% { height: 20%; } 50% { height: 100%; } }
 
         /* Barra de progreso */
         input[type=range] { -webkit-appearance: none; background: transparent; }
@@ -236,6 +235,7 @@
         </div>
 
         <div class="app-container">
+            <!-- Playlist Centrada en el espacio superior -->
             <div class="flex justify-between items-end h-12 mb-4 text-left">
                 <h1 class="text-2xl font-bold text-white tracking-wide uppercase italic">Playlist</h1>
                 <div class="text-[10px] text-gray-400 font-mono mb-1" id="clock-display">00:00</div>
@@ -284,7 +284,6 @@
                 </div>
             </div>
             
-            <!-- Recuadros internos aumentados en padding y texto -->
             <div class="grid grid-cols-3 gap-3">
                 <div class="bg-blue-900/40 p-4 rounded-xl border border-[var(--gold-dark)]/30 text-left">
                     <span class="text-[10px] text-[var(--gold-primary)] uppercase font-bold block mb-1">Edad</span>
@@ -354,9 +353,14 @@
 
     <script>
         const audio = new Audio();
+        audio.crossOrigin = "anonymous";
         let isPlaying = false;
         let currentSongIndex = 0;
         
+        // Variables para el Analizador de Audio
+        let audioCtx, analyser, source, dataArray;
+        let visualizerInitialized = false;
+
         const songs = [
             { src: "SEVDALIZA - NO ME CANSARE FT. KAROL G (BORN 2B AN ANGEL) [OFFICIAL LYRIC VIDEO].mp3", title: "No Me Cansaré", artist: "Sevdaliza ft. Karol G", duration: "3:12", cover: "https://images.genius.com/7c40813f489791519d37e1652ac3b552.300x300x1.png" },
             { src: "dANCE IN THE DARK.mp3", title: "Dance In The Dark", artist: "Lady Gaga", duration: "4:49", cover: "https://i.ytimg.com/vi/-SBmJvwiDns/mqdefault.jpg" },
@@ -402,9 +406,13 @@
                 const isActive = index === currentSongIndex;
                 const div = document.createElement('div');
                 div.className = `song-row flex items-center p-2 mb-1 cursor-pointer ${isActive ? 'active' : ''}`;
+                
+                // Marcamos el ecualizador activo con una clase específica para el script de animación
                 div.innerHTML = `
                     <div class="w-8 flex justify-center text-[10px] font-mono text-[var(--gold-dark)]">
-                        ${isActive && isPlaying ? '<div class="equalizer"><div class="bar"></div><div class="bar"></div><div class="bar"></div></div>' : (index + 1)}
+                        ${isActive && isPlaying 
+                            ? '<div class="equalizer active-eq-container"><div class="bar"></div><div class="bar"></div><div class="bar"></div></div>' 
+                            : (index + 1)}
                     </div>
                     <img src="${song.cover}" class="w-8 h-8 rounded mx-2 object-cover border border-white/5">
                     <div class="flex-1 overflow-hidden text-left">
@@ -413,7 +421,13 @@
                     </div>
                     <div class="text-[9px] text-gray-500 font-mono pr-2">${song.duration}</div>
                 `;
-                div.onclick = () => playSong(index);
+                div.onclick = () => {
+                    if (index === currentSongIndex) {
+                        togglePlay();
+                    } else {
+                        playSong(index);
+                    }
+                };
                 playlistContainer.appendChild(div);
             });
         }
@@ -428,21 +442,66 @@
             audio.load();
         }
 
-        function playSong(index) {
-            if (index !== currentSongIndex) {
-                loadSong(index);
+        function initAudioVisualizer() {
+            if (visualizerInitialized) return;
+            
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            analyser = audioCtx.createAnalyser();
+            source = audioCtx.createMediaElementSource(audio);
+            
+            source.connect(analyser);
+            analyser.connect(audioCtx.destination);
+            
+            analyser.fftSize = 64; 
+            const bufferLength = analyser.frequencyBinCount;
+            dataArray = new Uint8Array(bufferLength);
+            
+            visualizerInitialized = true;
+            animateVisualizer();
+        }
+
+        function animateVisualizer() {
+            requestAnimationFrame(animateVisualizer);
+            if (!isPlaying) return;
+
+            analyser.getByteFrequencyData(dataArray);
+            
+            // Buscamos los elementos del ecualizador activo en el DOM
+            const bars = document.querySelectorAll('.active-eq-container .bar');
+            if (bars.length > 0) {
+                // Usamos diferentes rangos de frecuencia para cada barra
+                bars[0].style.height = Math.max(15, (dataArray[2] / 255) * 100) + '%';
+                bars[1].style.height = Math.max(15, (dataArray[6] / 255) * 100) + '%';
+                bars[2].style.height = Math.max(15, (dataArray[10] / 255) * 100) + '%';
             }
-            audio.play();
+        }
+
+        function playSong(index) {
+            currentSongIndex = index;
+            loadSong(index);
+            
+            // Inicializar audio context en la primera interacción
+            initAudioVisualizer();
+            if (audioCtx && audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+
+            audio.play().catch(e => console.log("Error al reproducir:", e));
             isPlaying = true;
             updateUI();
         }
 
         function togglePlay() {
+            initAudioVisualizer();
+            if (audioCtx && audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+
             if (isPlaying) {
                 audio.pause();
                 isPlaying = false;
             } else {
-                audio.play();
+                audio.play().catch(e => console.log("Error al reproducir:", e));
                 isPlaying = true;
             }
             updateUI();
