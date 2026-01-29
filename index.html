@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sham</title>
+    <title>SHAMPU Interface - Steampunk Music</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Inter:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -29,14 +29,14 @@
             color: white;
         }
 
-        /* Contenedor móvil - Paisaje */
+        /* Contenedor móvil - Paisaje con brillo ambiental */
         .mobile-frame {
             width: 100%;
             max-width: 900px;
             height: 520px;
             background: linear-gradient(135deg, var(--deep-blue) 0%, #000 100%);
             border-radius: 40px;
-            box-shadow: 0 0 80px rgba(212, 175, 55, 0.15);
+            box-shadow: 0 0 100px rgba(212, 175, 55, 0.2), inset 0 0 20px rgba(0, 35, 102, 0.5);
             position: relative;
             overflow: hidden;
             display: flex;
@@ -61,7 +61,7 @@
             to { transform: rotate(360deg); }
         }
 
-        /* Contenedor del personaje principal */
+        /* Personaje Principal con Glow y Animación de flotado */
         .main-char-container {
             position: absolute;
             bottom: 0;
@@ -80,11 +80,18 @@
             width: auto;
             object-fit: contain;
             object-position: bottom;
-            filter: drop-shadow(15px 0 25px rgba(0,0,0,0.9));
+            /* Filtro de brillo dorado y sombra profunda */
+            filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.6)) drop-shadow(15px 0 25px rgba(0,0,0,0.9));
+            animation: floatChar 5s ease-in-out infinite;
         }
 
-        /* Efecto de texto dorado */
-        .sham-text {
+        @keyframes floatChar {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        /* Nombre SHAMPU - Ajustado margen para evitar recorte */
+        .shampu-text {
             font-family: 'Playfair Display', serif;
             background: linear-gradient(90deg, var(--gold-dark), var(--gold-light), var(--gold-dark));
             background-size: 200% auto;
@@ -93,13 +100,14 @@
             animation: shine 4s linear infinite;
             letter-spacing: 4px;
             font-style: italic;
+            padding-right: 15px; /* Evita el recorte a la derecha */
         }
 
         @keyframes shine {
             to { background-position: 200% center; }
         }
 
-        /* Efecto de rotación de color para ECUAGOD (Amarillo, Azul, Rojo) */
+        /* Efecto ECUAGOD */
         @keyframes flag-rotation {
             0%, 33% { color: #FFCC00; }
             34%, 66% { color: #003399; }
@@ -109,7 +117,6 @@
             animation: flag-rotation 3s steps(1) infinite;
         }
 
-        /* Panel estilo Glassmorphism */
         .glass-panel {
             background: rgba(0, 35, 102, 0.3);
             backdrop-filter: blur(10px);
@@ -117,7 +124,7 @@
             border: 1px solid rgba(212, 175, 55, 0.2);
         }
 
-        /* Estilos de la aplicación de música */
+        /* App Container */
         .app-container {
             flex: 1;
             margin-left: 38%; 
@@ -134,6 +141,7 @@
         .song-list {
             flex: 1;
             overflow-y: auto;
+            overflow-x: hidden;
             padding-right: 5px;
             scroll-behavior: smooth;
         }
@@ -170,6 +178,7 @@
             opacity: 0;
             visibility: hidden;
             transform: translateY(20px);
+            overflow-x: hidden;
         }
 
         .overlay-panel.active {
@@ -181,10 +190,10 @@
         #overlay-about { top: 80px; left: 50%; transform: translateX(-50%) translateY(20px); width: 420px; }
         #overlay-about.active { transform: translateX(-50%) translateY(0); }
         
-        #overlay-gallery { top: 80px; right: 40px; width: 350px; }
+        #overlay-gallery { top: 80px; right: 40px; width: 380px; }
         #overlay-friends { top: 0; right: 0; height: 100%; width: 280px; border-radius: 0 32px 32px 0; }
 
-        /* Ecualizador - Controlado por JS */
+        /* Ecualizador */
         .equalizer {
             display: flex;
             align-items: flex-end;
@@ -198,7 +207,7 @@
             transition: height 0.1s ease;
         }
 
-        /* Nueva Barra de progreso estilo Spotify */
+        /* Spotify Progress Bar */
         .progress-container {
             flex: 1;
             height: 4px;
@@ -215,11 +224,7 @@
             border-radius: 10px;
             transition: width 0.1s linear;
         }
-        .progress-container:hover .progress-fill {
-            background: var(--gold-light);
-        }
 
-        /* Barrita inferior estilo iPhone */
         .bottom-home-bar {
             position: absolute;
             bottom: 8px;
@@ -231,6 +236,10 @@
             border-radius: 10px;
             z-index: 60;
         }
+
+        /* Custom Scroll para Crushes */
+        .custom-scroll::-webkit-scrollbar { width: 3px; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: var(--gold-dark); border-radius: 10px; }
     </style>
 </head>
 <body>
@@ -239,22 +248,24 @@
         <i class="fas fa-cog bg-gear"></i>
         
         <nav class="flex justify-between items-center px-10 pt-6 pb-3 z-50 w-full glass-panel absolute top-0 rounded-t-[32px]">
-            <div class="text-3xl sham-text font-bold tracking-tighter">SHAM</div>
+            <div class="text-3xl shampu-text font-bold tracking-tighter uppercase">SHAMPU</div>
             <div class="flex gap-8">
-                <button onclick="toggleOverlay('overlay-about')" class="text-[10px] font-bold text-gray-400 hover:text-[var(--gold-primary)] transition-colors tracking-[0.2em] uppercase">Sobre Mí</button>
-                <button onclick="toggleOverlay('overlay-gallery')" class="text-[10px] font-bold text-gray-400 hover:text-[var(--gold-primary)] transition-colors tracking-[0.2em] uppercase">Galería</button>
-                <button onclick="toggleOverlay('overlay-friends')" class="text-[10px] font-bold text-gray-400 hover:text-[var(--gold-primary)] transition-colors tracking-[0.2em] uppercase">Aliados</button>
+                <!-- Botones ahora dorados por defecto -->
+                <button onclick="toggleOverlay('overlay-about')" class="text-[10px] font-bold text-[var(--gold-primary)] hover:text-[var(--gold-light)] transition-colors tracking-[0.2em] uppercase">Sobre Mí</button>
+                <button onclick="toggleOverlay('overlay-gallery')" class="text-[10px] font-bold text-[var(--gold-primary)] hover:text-[var(--gold-light)] transition-colors tracking-[0.2em] uppercase">Crushes</button>
+                <button onclick="toggleOverlay('overlay-friends')" class="text-[10px] font-bold text-[var(--gold-primary)] hover:text-[var(--gold-light)] transition-colors tracking-[0.2em] uppercase">Aliados</button>
             </div>
         </nav>
 
         <div class="main-char-container">
-            <img src="https://xatimg.com/image/blnyN6shCImG.png" alt="Personaje Sham" class="main-char">
+            <!-- Imagen con Glow Mejorado -->
+            <img src="https://xatimg.com/image/blnyN6shCImG.png" alt="Personaje SHAMPU" class="main-char">
         </div>
 
         <div class="app-container">
-            <!-- Playlist Centrada en el espacio superior -->
+            <!-- Playlist ahora en color dorado -->
             <div class="flex justify-between items-end h-12 mb-4 text-left">
-                <h1 class="text-2xl font-bold text-white tracking-wide uppercase italic">Playlist</h1>
+                <h1 class="text-2xl font-bold text-[var(--gold-primary)] tracking-wide uppercase italic drop-shadow-[0_0_8px_rgba(212,175,55,0.4)]">Playlist</h1>
                 <div class="text-[10px] text-gray-400 font-mono mb-1" id="clock-display">00:00</div>
             </div>
 
@@ -269,13 +280,12 @@
                     </div>
                     <div class="flex items-center gap-4">
                         <button onclick="prevSong()" class="text-gray-400 hover:text-white transition-colors"><i class="fas fa-backward-step"></i></button>
-                        <button id="play-pause-btn" onclick="togglePlay()" class="w-8 h-8 rounded-full bg-[var(--gold-primary)] text-black flex items-center justify-center hover:scale-105 transition">
+                        <button id="play-pause-btn" onclick="togglePlay()" class="w-8 h-8 rounded-full bg-[var(--gold-primary)] text-black flex items-center justify-center hover:scale-105 transition shadow-[0_0_15px_rgba(212,175,55,0.4)]">
                             <i class="fas fa-play text-xs ml-0.5"></i>
                         </button>
                         <button onclick="nextSong()" class="text-gray-400 hover:text-white transition-colors"><i class="fas fa-forward-step"></i></button>
                     </div>
                 </div>
-                <!-- Nueva Barra de Progreso Spotify-style -->
                 <div class="flex items-center gap-3">
                     <span id="current-time" class="text-[9px] font-mono text-gray-500 w-8">0:00</span>
                     <div class="progress-container" id="progress-container">
@@ -322,18 +332,56 @@
             <button onclick="closeAllOverlays()" class="absolute top-2 right-2 text-gray-500 hover:text-white text-lg">×</button>
         </div>
 
-        <!-- GALERÍA -->
-        <div id="overlay-gallery" class="overlay-panel rounded-2xl p-4">
-            <h3 class="text-[var(--gold-primary)] font-bold text-xs mb-3 uppercase tracking-widest border-b border-[var(--gold-dark)] pb-2">GALERÍA DE RELIQUIAS</h3>
-            <div class="grid grid-cols-3 gap-2">
-                <div class="aspect-square bg-blue-900/20 rounded border border-[var(--gold-dark)]/30 hover:border-[var(--gold-primary)] transition-all"></div>
-                <div class="aspect-square bg-blue-900/20 rounded border border-[var(--gold-dark)]/30 hover:border-[var(--gold-primary)] transition-all"></div>
-                <div class="aspect-square bg-blue-900/20 rounded border border-[var(--gold-dark)]/30 hover:border-[var(--gold-primary)] transition-all"></div>
-                <div class="aspect-square bg-blue-900/20 rounded border border-[var(--gold-dark)]/30 hover:border-[var(--gold-primary)] transition-all"></div>
-                <div class="aspect-square bg-blue-900/20 rounded border border-[var(--gold-dark)]/30 hover:border-[var(--gold-primary)] transition-all"></div>
-                <div class="aspect-square bg-blue-900/20 rounded border border-[var(--gold-dark)]/30 hover:border-[var(--gold-primary)] transition-all"></div>
+        <!-- CRUSHES (😍💘) -->
+        <div id="overlay-gallery" class="overlay-panel rounded-2xl p-5 overflow-hidden">
+            <h3 class="text-[var(--gold-primary)] font-bold text-xl mb-4 border-b border-[var(--gold-dark)]/40 pb-2 text-center drop-shadow-[0_0_5px_rgba(212,175,55,0.5)]">😍💘</h3>
+            
+            <div class="grid grid-cols-3 gap-x-2 gap-y-4 overflow-y-auto max-h-[320px] pr-1 custom-scroll overflow-x-hidden">
+                <!-- Jenna -->
+                <div class="flex flex-col items-center gap-1 group">
+                    <div class="aspect-[3/4] w-full bg-blue-900/20 rounded-lg border border-[var(--gold-dark)]/30 overflow-hidden group-hover:border-[var(--gold-primary)] transition-all shadow-lg">
+                        <img src="https://xatimg.com/image/Rsmsu0f5osAn.jpg" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    </div>
+                    <span class="text-[10px] text-[var(--gold-primary)] font-bold uppercase tracking-tighter mt-1 truncate w-full text-center">Jenna</span>
+                </div>
+                <!-- Kendall -->
+                <div class="flex flex-col items-center gap-1 group">
+                    <div class="aspect-[3/4] w-full bg-blue-900/20 rounded-lg border border-[var(--gold-dark)]/30 overflow-hidden group-hover:border-[var(--gold-primary)] transition-all shadow-lg">
+                        <img src="https://xatimg.com/image/InRQtVNrSswB.jpg" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    </div>
+                    <span class="text-[10px] text-[var(--gold-primary)] font-bold uppercase tracking-tighter mt-1 truncate w-full text-center">Kendall</span>
+                </div>
+                <!-- Dua -->
+                <div class="flex flex-col items-center gap-1 group">
+                    <div class="aspect-[3/4] w-full bg-blue-900/20 rounded-lg border border-[var(--gold-dark)]/30 overflow-hidden group-hover:border-[var(--gold-primary)] transition-all shadow-lg">
+                        <img src="https://xatimg.com/image/3vH7GhzIJctt.jpg" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    </div>
+                    <span class="text-[10px] text-[var(--gold-primary)] font-bold uppercase tracking-tighter mt-1 truncate w-full text-center">Dua</span>
+                </div>
+                <!-- Lily -->
+                <div class="flex flex-col items-center gap-1 group">
+                    <div class="aspect-[3/4] w-full bg-blue-900/20 rounded-lg border border-[var(--gold-dark)]/30 overflow-hidden group-hover:border-[var(--gold-primary)] transition-all shadow-lg">
+                        <img src="https://xatimg.com/image/sDMh50mB3nZy.jpg" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    </div>
+                    <span class="text-[10px] text-[var(--gold-primary)] font-bold uppercase tracking-tighter mt-1 truncate w-full text-center">Lily</span>
+                </div>
+                <!-- Deva -->
+                <div class="flex flex-col items-center gap-1 group">
+                    <div class="aspect-[3/4] w-full bg-blue-900/20 rounded-lg border border-[var(--gold-dark)]/30 overflow-hidden group-hover:border-[var(--gold-primary)] transition-all shadow-lg">
+                        <img src="https://xatimg.com/image/oIMvJRnsC6P3.jpg" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    </div>
+                    <span class="text-[10px] text-[var(--gold-primary)] font-bold uppercase tracking-tighter mt-1 truncate w-full text-center">Deva</span>
+                </div>
+                <!-- Daniela -->
+                <div class="flex flex-col items-center gap-1 group">
+                    <div class="aspect-[3/4] w-full bg-blue-900/20 rounded-lg border border-[var(--gold-dark)]/30 overflow-hidden group-hover:border-[var(--gold-primary)] transition-all shadow-lg">
+                        <img src="https://xatimg.com/image/mwBrMYD2H8sU.jpg" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    </div>
+                    <span class="text-[10px] text-[var(--gold-primary)] font-bold uppercase tracking-tighter mt-1 truncate w-full text-center">Daniela</span>
+                </div>
             </div>
-            <button onclick="closeAllOverlays()" class="absolute top-2 right-2 text-gray-500 hover:text-white">×</button>
+            
+            <button onclick="closeAllOverlays()" class="absolute top-2 right-2 text-gray-500 hover:text-white text-lg">×</button>
         </div>
 
         <!-- ALIADOS -->
@@ -341,28 +389,28 @@
             <h3 class="text-[var(--gold-primary)] font-bold text-sm mb-6 uppercase tracking-widest border-b border-[var(--gold-dark)] pb-2 mt-12 text-right">ALIADOS</h3>
             <div class="flex flex-col gap-4 overflow-y-auto pr-2 friends-list">
                 <a href="https://xat.me/xMelanie" target="_blank" class="flex items-center gap-3 justify-end group cursor-pointer">
-                    <div class="text-right"><div class="text-[11px] font-bold group-hover:text-[var(--gold-primary)] transition-colors">Mel</div><div class="text-[8px] text-blue-400">@xMelanie</div></div>
-                    <div class="w-10 h-10 rounded-full border border-[var(--gold-dark)] overflow-hidden"><img src="https://xatimg.com/image/mmJI6iAzrWZA.jpg" class="w-full h-full object-cover"></div>
+                    <div class="text-right"><div class="text-[11px] font-bold text-[var(--gold-primary)] group-hover:text-[var(--gold-light)] transition-colors">Mel</div><div class="text-[8px] text-blue-400">@xMelanie</div></div>
+                    <div class="w-10 h-10 rounded-full border border-[var(--gold-dark)] overflow-hidden shadow-lg"><img src="https://xatimg.com/image/mmJI6iAzrWZA.jpg" class="w-full h-full object-cover"></div>
                 </a>
                 <a href="https://xat.me/Lookatmekissme" target="_blank" class="flex items-center gap-3 justify-end group cursor-pointer">
-                    <div class="text-right"><div class="text-[11px] font-bold group-hover:text-[var(--gold-primary)] transition-colors">Valerie</div><div class="text-[8px] text-blue-400">@Lookatmekissme</div></div>
-                    <div class="w-10 h-10 rounded-full border border-[var(--gold-dark)] overflow-hidden"><img src="https://xatimg.com/image/SEfM9tyRrCXF.png" class="w-full h-full object-cover"></div>
+                    <div class="text-right"><div class="text-[11px] font-bold text-[var(--gold-primary)] group-hover:text-[var(--gold-light)] transition-colors">Valerie</div><div class="text-[8px] text-blue-400">@Lookatmekissme</div></div>
+                    <div class="w-10 h-10 rounded-full border border-[var(--gold-dark)] overflow-hidden shadow-lg"><img src="https://xatimg.com/image/SEfM9tyRrCXF.png" class="w-full h-full object-cover"></div>
                 </a>
                 <a href="https://xat.me/Nami" target="_blank" class="flex items-center gap-3 justify-end group cursor-pointer">
-                    <div class="text-right"><div class="text-[11px] font-bold group-hover:text-[var(--gold-primary)] transition-colors">Kyma</div><div class="text-[8px] text-blue-400">@Nami</div></div>
-                    <div class="w-10 h-10 rounded-full border border-[var(--gold-dark)] overflow-hidden"><img src="https://xatimg.com/image/KIezHHgTv4kG.png" class="w-full h-full object-cover"></div>
+                    <div class="text-right"><div class="text-[11px] font-bold text-[var(--gold-primary)] group-hover:text-[var(--gold-light)] transition-colors">Kyma</div><div class="text-[8px] text-blue-400">@Nami</div></div>
+                    <div class="w-10 h-10 rounded-full border border-[var(--gold-dark)] overflow-hidden shadow-lg"><img src="https://xatimg.com/image/KIezHHgTv4kG.png" class="w-full h-full object-cover"></div>
                 </a>
                 <a href="https://xat.me/shironogame" target="_blank" class="flex items-center gap-3 justify-end group cursor-pointer">
-                    <div class="text-right"><div class="text-[11px] font-bold group-hover:text-[var(--gold-primary)] transition-colors">Fem</div><div class="text-[8px] text-blue-400">@shironogame</div></div>
-                    <div class="w-10 h-10 rounded-full border border-[var(--gold-dark)] overflow-hidden"><img src="https://xatimg.com/image/uMKEOp0Od1xm.jpg" class="w-full h-full object-cover"></div>
+                    <div class="text-right"><div class="text-[11px] font-bold text-[var(--gold-primary)] group-hover:text-[var(--gold-light)] transition-colors">Fem</div><div class="text-[8px] text-blue-400">@shironogame</div></div>
+                    <div class="w-10 h-10 rounded-full border border-[var(--gold-dark)] overflow-hidden shadow-lg"><img src="https://xatimg.com/image/uMKEOp0Od1xm.jpg" class="w-full h-full object-cover"></div>
                 </a>
                 <a href="https://xat.me/Cobain" target="_blank" class="flex items-center gap-3 justify-end group cursor-pointer">
-                    <div class="text-right"><div class="text-[11px] font-bold group-hover:text-[var(--gold-primary)] transition-colors">Jean</div><div class="text-[8px] text-blue-400">@Cobain</div></div>
-                    <div class="w-10 h-10 rounded-full border border-[var(--gold-dark)] overflow-hidden"><img src="https://xatimg.com/image/rj1xIaMGxAAf.jpg" class="w-full h-full object-cover"></div>
+                    <div class="text-right"><div class="text-[11px] font-bold text-[var(--gold-primary)] group-hover:text-[var(--gold-light)] transition-colors">Jean</div><div class="text-[8px] text-blue-400">@Cobain</div></div>
+                    <div class="w-10 h-10 rounded-full border border-[var(--gold-dark)] overflow-hidden shadow-lg"><img src="https://xatimg.com/image/rj1xIaMGxAAf.jpg" class="w-full h-full object-cover"></div>
                 </a>
                 <a href="https://xat.me/ShanksAkagamii" target="_blank" class="flex items-center gap-3 justify-end group cursor-pointer">
-                    <div class="text-right"><div class="text-[11px] font-bold group-hover:text-[var(--gold-primary)] transition-colors">Plebe</div><div class="text-[8px] text-blue-400">@ShanksAkagamii</div></div>
-                    <div class="w-10 h-10 rounded-full border border-[var(--gold-dark)] overflow-hidden"><img src="https://xatimg.com/image/0AdLHKRLvghV.jpg" class="w-full h-full object-cover"></div>
+                    <div class="text-right"><div class="text-[11px] font-bold text-[var(--gold-primary)] group-hover:text-[var(--gold-light)] transition-colors">Plebe</div><div class="text-[8px] text-blue-400">@ShanksAkagamii</div></div>
+                    <div class="w-10 h-10 rounded-full border border-[var(--gold-dark)] overflow-hidden shadow-lg"><img src="https://xatimg.com/image/0AdLHKRLvghV.jpg" class="w-full h-full object-cover"></div>
                 </a>
             </div>
             <button onclick="closeAllOverlays()" class="absolute top-4 left-4 text-[var(--gold-primary)] text-xl"><i class="fas fa-times"></i></button>
@@ -377,7 +425,6 @@
         let isPlaying = false;
         let currentSongIndex = 0;
         
-        // Variables para el Analizador de Audio
         let audioCtx, analyser, source, dataArray;
         let visualizerInitialized = false;
 
@@ -443,16 +490,12 @@
                     <div class="text-[9px] text-gray-500 font-mono pr-2">${song.duration}</div>
                 `;
                 div.onclick = () => {
-                    if (index === currentSongIndex) {
-                        togglePlay();
-                    } else {
-                        playSong(index);
-                    }
+                    if (index === currentSongIndex) togglePlay();
+                    else playSong(index);
                 };
                 playlistContainer.appendChild(div);
             });
 
-            // Auto-scroll a la canción activa
             const activeRow = document.getElementById('active-row');
             if (activeRow) {
                 activeRow.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -482,9 +525,7 @@
                 dataArray = new Uint8Array(bufferLength);
                 visualizerInitialized = true;
                 animateVisualizer();
-            } catch(e) {
-                console.log("AudioContext could not start", e);
-            }
+            } catch(e) { console.log("AudioContext could not start", e); }
         }
 
         function animateVisualizer() {
