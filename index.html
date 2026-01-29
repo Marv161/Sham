@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sham Interface - Steampunk Music</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Inter:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --gold-primary: #D4AF37;
+            --gold-light: #F9E076;
+            --gold-dark: #996515;
+            --royal-blue: #002366;
+            --deep-blue: #001233;
+            --steampunk-bg: #0a0a0a;
+        }
+
+        body {
+            background-color: #050505;
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            overflow: hidden;
+            color: white;
+        }
+
+        /* Contenedor móvil - Paisaje */
+        .mobile-frame {
+            width: 100%;
+            max-width: 900px;
+            height: 520px;
+            background: linear-gradient(135deg, var(--deep-blue) 0%, #000 100%);
+            border-radius: 40px;
+            box-shadow: 0 0 80px rgba(212, 175, 55, 0.15);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            border: 8px solid #1a1a1a;
+        }
+
+        /* Decoración de engranaje de fondo */
+        .bg-gear {
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            font-size: 20rem;
+            color: rgba(212, 175, 55, 0.03);
+            z-index: 0;
+            pointer-events: none;
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Contenedor del personaje principal - Movido 10% a la derecha (ajuste de -180px a -90px aprox) */
+        .main-char-container {
+            position: absolute;
+            bottom: 0;
+            left: -90px; 
+            height: 110%; 
+            width: 50%;
+            z-index: 10;
+            pointer-events: none;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+        }
+        
+        .main-char {
+            height: 100%;
+            width: auto;
+            object-fit: contain;
+            object-position: bottom;
+            filter: drop-shadow(15px 0 25px rgba(0,0,0,0.9));
+        }
+
+        /* Efecto de texto dorado */
+        .sham-text {
+            font-family: 'Playfair Display', serif;
+            background: linear-gradient(90deg, var(--gold-dark), var(--gold-light), var(--gold-dark));
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shine 4s linear infinite;
+            letter-spacing: 4px;
+            font-style: italic;
+        }
+
+        @keyframes shine {
+            to { background-position: 200% center; }
+        }
+
+        /* Efecto de rotación de color para ECUAGOD (Amarillo, Azul, Rojo) */
+        @keyframes flag-rotation {
+            0%, 33% { color: #FFCC00; }
+            34%, 66% { color: #003399; }
+            67%, 100% { color: #EE2737; }
+        }
+        .ecuagod-effect {
+            animation: flag-rotation 3s steps(1) infinite;
+        }
+
+        /* Panel estilo Glassmorphism */
+        .glass-panel {
+            background: rgba(0, 35, 102, 0.3);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+        }
+
+        /* Estilos de la aplicación de música */
+        .app-container {
+            flex: 1;
+            margin-left: 38%; 
+            margin-top: 60px;
+            margin-bottom: 25px;
+            margin-right: 25px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 20;
+            overflow: hidden;
+        }
+
+        .song-list {
+            flex: 1;
+            overflow-y: auto;
+            padding-right: 5px;
+        }
+
+        .song-list::-webkit-scrollbar { width: 4px; }
+        .song-list::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); }
+        .song-list::-webkit-scrollbar-thumb { background: var(--gold-dark); border-radius: 2px; }
+
+        .song-row {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+            transition: all 0.2s;
+            border-left: 3px solid transparent;
+        }
+
+        .song-row:hover {
+            background: rgba(212, 175, 55, 0.1);
+            transform: translateX(5px);
+        }
+
+        .song-row.active {
+            background: rgba(212, 175, 55, 0.15);
+            border-left: 3px solid var(--gold-primary);
+        }
+
+        /* Overlays */
+        .overlay-panel {
+            position: absolute;
+            z-index: 100;
+            background: rgba(5, 15, 35, 0.98);
+            border: 1px solid var(--gold-dark);
+            backdrop-filter: blur(20px);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(20px);
+        }
+
+        .overlay-panel.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        /* Tamaño restaurado a 420px */
+        #overlay-about { top: 80px; left: 50%; transform: translateX(-50%) translateY(20px); width: 420px; }
+        #overlay-about.active { transform: translateX(-50%) translateY(0); }
+        
+        #overlay-gallery { top: 80px; right: 40px; width: 350px; }
+        #overlay-friends { top: 0; right: 0; height: 100%; width: 280px; border-radius: 0 32px 32px 0; }
+
+        /* Ecualizador */
+        .equalizer {
+            display: flex;
+            align-items: flex-end;
+            height: 12px;
+            gap: 2px;
+        }
+        .bar {
+            width: 2px;
+            background-color: var(--gold-primary);
+            animation: bounce 1s infinite ease-in-out;
+        }
+        @keyframes bounce { 0%, 100% { height: 20%; } 50% { height: 100%; } }
+
+        /* Barra de progreso */
+        input[type=range] { -webkit-appearance: none; background: transparent; }
+        input[type=range]::-webkit-slider-runnable-track { background: rgba(255,255,255,0.1); height: 3px; border-radius: 2px; }
+        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 10px; width: 10px; border-radius: 50%; background: var(--gold-primary); margin-top: -3.5px; box-shadow: 0 0 5px var(--gold-primary); cursor: pointer; }
+
+        /* Barrita inferior estilo iPhone */
+        .bottom-home-bar {
+            position: absolute;
+            bottom: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            z-index: 60;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="mobile-frame" id="main-frame">
+        <i class="fas fa-cog bg-gear"></i>
+        
+        <nav class="flex justify-between items-center px-10 pt-6 pb-3 z-50 w-full glass-panel absolute top-0 rounded-t-[32px]">
+            <div class="text-3xl sham-text font-bold tracking-tighter">SHAM</div>
+            <div class="flex gap-8">
+                <button onclick="toggleOverlay('overlay-about')" class="text-[10px] font-bold text-gray-400 hover:text-[var(--gold-primary)] transition-colors tracking-[0.2em] uppercase">Sobre Mí</button>
+                <button onclick="toggleOverlay('overlay-gallery')" class="text-[10px] font-bold text-gray-400 hover:text-[var(--gold-primary)] transition-colors tracking-[0.2em] uppercase">Galería</button>
+                <button onclick="toggleOverlay('overlay-friends')" class="text-[10px] font-bold text-gray-400 hover:text-[var(--gold-primary)] transition-colors tracking-[0.2em] uppercase">Aliados</button>
+            </div>
+        </nav>
+
+        <div class="main-char-container">
+            <img src="https://xatimg.com/image/blnyN6shCImG.png" alt="Personaje Sham" class="main-char">
+        </div>
+
+        <div class="app-container">
+            <div class="flex justify-between items-end h-12 mb-4 text-left">
+                <h1 class="text-2xl font-bold text-white tracking-wide uppercase italic">Playlist</h1>
+                <div class="text-[10px] text-gray-400 font-mono mb-1" id="clock-display">00:00</div>
+            </div>
+
+            <div class="song-list" id="playlist-container"></div>
+
+            <div class="glass-panel rounded-xl p-3 flex flex-col gap-2 mt-auto border-t-2 border-[var(--gold-dark)] shadow-2xl">
+                <div class="flex items-center gap-4">
+                    <img id="player-cover" src="" class="w-10 h-10 rounded border border-[var(--gold-dark)] object-cover shadow-lg">
+                    <div class="flex-1 overflow-hidden text-left">
+                        <h4 id="player-title" class="text-xs font-bold truncate">Cargando...</h4>
+                        <p id="player-artist" class="text-[10px] text-gray-400 truncate">Sincronizando engranajes</p>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <button onclick="prevSong()" class="text-gray-400 hover:text-white"><i class="fas fa-backward-step"></i></button>
+                        <button id="play-pause-btn" onclick="togglePlay()" class="w-8 h-8 rounded-full bg-[var(--gold-primary)] text-black flex items-center justify-center hover:scale-105 transition">
+                            <i class="fas fa-play text-xs ml-0.5"></i>
+                        </button>
+                        <button onclick="nextSong()" class="text-gray-400 hover:text-white"><i class="fas fa-forward-step"></i></button>
+                    </div>
+                </div>
+                <div class="flex items-center gap-3">
+                    <span id="current-time" class="text-[9px] font-mono text-gray-500">0:00</span>
+                    <input type="range" id="progress-bar" min="0" value="0" class="flex-1 cursor-pointer">
+                    <span id="total-time" class="text-[9px] font-mono text-gray-500">0:00</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- SOBRE MÍ -->
+        <div id="overlay-about" class="overlay-panel rounded-2xl p-6 text-white overflow-hidden">
+            <div class="flex gap-4 items-center mb-6 border-b border-[var(--gold-dark)]/40 pb-5">
+                <div class="w-24 h-24 flex-shrink-0 rounded-lg border-2 border-[var(--gold-primary)] overflow-hidden shadow-[0_0_20px_rgba(212,175,55,0.4)]">
+                    <img src="https://xatimg.com/image/g5kWCW8oBuH8.png" class="w-full h-full object-cover">
+                </div>
+                <div class="text-left flex-1">
+                    <h3 class="text-[var(--gold-primary)] font-bold text-3xl italic leading-none mb-1">LADY</h3>
+                    <div class="flex items-center gap-2">
+                        <span class="ecuagod-effect text-xs font-black tracking-widest uppercase">ECUAGOD</span>
+                        <img src="https://cdn-icons-png.flaticon.com/256/8603/8603086.png" class="w-5 h-5 object-contain">
+                    </div>
+                    <div class="mt-4 text-sm text-white font-medium leading-tight">
+                        Perreo pa lo nene, perreo pa la nena
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Recuadros internos aumentados en padding y texto -->
+            <div class="grid grid-cols-3 gap-3">
+                <div class="bg-blue-900/40 p-4 rounded-xl border border-[var(--gold-dark)]/30 text-left">
+                    <span class="text-[10px] text-[var(--gold-primary)] uppercase font-bold block mb-1">Edad</span>
+                    <span class="text-xs text-white font-semibold">Guess if you can</span>
+                </div>
+                <div class="bg-blue-900/40 p-4 rounded-xl border border-[var(--gold-dark)]/30 text-left">
+                    <span class="text-[10px] text-[var(--gold-primary)] uppercase font-bold block mb-1">Preferencia</span>
+                    <span class="text-xs text-white font-semibold">Bisexual ⚤</span>
+                </div>
+                <div class="bg-blue-900/40 p-4 rounded-xl border border-[var(--gold-dark)]/30 text-left">
+                    <span class="text-[10px] text-[var(--gold-primary)] uppercase font-bold block mb-1">Signo</span>
+                    <span class="text-xs text-white font-semibold">Sagitario ♐</span>
+                </div>
+            </div>
+            
+            <button onclick="closeAllOverlays()" class="absolute top-2 right-2 text-gray-500 hover:text-white text-lg">×</button>
+        </div>
+
+        <!-- GALERÍA -->
+        <div id="overlay-gallery" class="overlay-panel rounded-2xl p-4">
+            <h3 class="text-[var(--gold-primary)] font-bold text-xs mb-3 uppercase tracking-widest border-b border-[var(--gold-dark)] pb-2">GALERÍA DE RELIQUIAS</h3>
+            <div class="grid grid-cols-3 gap-2">
+                <div class="aspect-square bg-blue-900/20 rounded border border-[var(--gold-dark)]/30 hover:border-[var(--gold-primary)] transition-all"></div>
+                <div class="aspect-square bg-blue-900/20 rounded border border-[var(--gold-dark)]/30 hover:border-[var(--gold-primary)] transition-all"></div>
+                <div class="aspect-square bg-blue-900/20 rounded border border-[var(--gold-dark)]/30 hover:border-[var(--gold-primary)] transition-all"></div>
+                <div class="aspect-square bg-blue-900/20 rounded border border-[var(--gold-dark)]/30 hover:border-[var(--gold-primary)] transition-all"></div>
+                <div class="aspect-square bg-blue-900/20 rounded border border-[var(--gold-dark)]/30 hover:border-[var(--gold-primary)] transition-all"></div>
+                <div class="aspect-square bg-blue-900/20 rounded border border-[var(--gold-dark)]/30 hover:border-[var(--gold-primary)] transition-all"></div>
+            </div>
+            <button onclick="closeAllOverlays()" class="absolute top-2 right-2 text-gray-500 hover:text-white">×</button>
+        </div>
+
+        <!-- ALIADOS -->
+        <div id="overlay-friends" class="overlay-panel p-6 flex flex-col">
+            <h3 class="text-[var(--gold-primary)] font-bold text-sm mb-6 uppercase tracking-widest border-b border-[var(--gold-dark)] pb-2 mt-12 text-right">ALIADOS</h3>
+            <div class="flex flex-col gap-4 overflow-y-auto pr-2 friends-list">
+                <a href="https://xat.me/xMelanie" target="_blank" class="flex items-center gap-3 justify-end group cursor-pointer">
+                    <div class="text-right"><div class="text-[11px] font-bold group-hover:text-[var(--gold-primary)] transition-colors">Mel</div><div class="text-[8px] text-blue-400">@xMelanie</div></div>
+                    <div class="w-10 h-10 rounded-full border border-[var(--gold-dark)] overflow-hidden"><img src="https://xatimg.com/image/mmJI6iAzrWZA.jpg" class="w-full h-full object-cover"></div>
+                </a>
+                <a href="https://xat.me/Lookatmekissme" target="_blank" class="flex items-center gap-3 justify-end group cursor-pointer">
+                    <div class="text-right"><div class="text-[11px] font-bold group-hover:text-[var(--gold-primary)] transition-colors">Valerie</div><div class="text-[8px] text-blue-400">@Lookatmekissme</div></div>
+                    <div class="w-10 h-10 rounded-full border border-[var(--gold-dark)] overflow-hidden"><img src="https://xatimg.com/image/SEfM9tyRrCXF.png" class="w-full h-full object-cover"></div>
+                </a>
+                <a href="https://xat.me/Nami" target="_blank" class="flex items-center gap-3 justify-end group cursor-pointer">
+                    <div class="text-right"><div class="text-[11px] font-bold group-hover:text-[var(--gold-primary)] transition-colors">Kyma</div><div class="text-[8px] text-blue-400">@Nami</div></div>
+                    <div class="w-10 h-10 rounded-full border border-[var(--gold-dark)] overflow-hidden"><img src="https://xatimg.com/image/KIezHHgTv4kG.png" class="w-full h-full object-cover"></div>
+                </a>
+                <a href="https://xat.me/shironogame" target="_blank" class="flex items-center gap-3 justify-end group cursor-pointer">
+                    <div class="text-right"><div class="text-[11px] font-bold group-hover:text-[var(--gold-primary)] transition-colors">Fem</div><div class="text-[8px] text-blue-400">@shironogame</div></div>
+                    <div class="w-10 h-10 rounded-full border border-[var(--gold-dark)] overflow-hidden"><img src="https://xatimg.com/image/uMKEOp0Od1xm.jpg" class="w-full h-full object-cover"></div>
+                </a>
+                <a href="https://xat.me/Cobain" target="_blank" class="flex items-center gap-3 justify-end group cursor-pointer">
+                    <div class="text-right"><div class="text-[11px] font-bold group-hover:text-[var(--gold-primary)] transition-colors">Jean</div><div class="text-[8px] text-blue-400">@Cobain</div></div>
+                    <div class="w-10 h-10 rounded-full border border-[var(--gold-dark)] overflow-hidden"><img src="https://xatimg.com/image/rj1xIaMGxAAf.jpg" class="w-full h-full object-cover"></div>
+                </a>
+                <a href="https://xat.me/ShanksAkagamii" target="_blank" class="flex items-center gap-3 justify-end group cursor-pointer">
+                    <div class="text-right"><div class="text-[11px] font-bold group-hover:text-[var(--gold-primary)] transition-colors">Plebe</div><div class="text-[8px] text-blue-400">@ShanksAkagamii</div></div>
+                    <div class="w-10 h-10 rounded-full border border-[var(--gold-dark)] overflow-hidden"><img src="https://xatimg.com/image/0AdLHKRLvghV.jpg" class="w-full h-full object-cover"></div>
+                </a>
+            </div>
+            <button onclick="closeAllOverlays()" class="absolute top-4 left-4 text-[var(--gold-primary)] text-xl"><i class="fas fa-times"></i></button>
+        </div>
+
+        <div class="bottom-home-bar"></div>
+    </div>
+
+    <script>
+        const audio = new Audio();
+        let isPlaying = false;
+        let currentSongIndex = 0;
+        
+        const songs = [
+            { src: "SEVDALIZA - NO ME CANSARE FT. KAROL G (BORN 2B AN ANGEL) [OFFICIAL LYRIC VIDEO].mp3", title: "No Me Cansaré", artist: "Sevdaliza ft. Karol G", duration: "3:12", cover: "https://images.genius.com/7c40813f489791519d37e1652ac3b552.300x300x1.png" },
+            { src: "dANCE IN THE DARK.mp3", title: "Dance In The Dark", artist: "Lady Gaga", duration: "4:49", cover: "https://i.ytimg.com/vi/-SBmJvwiDns/mqdefault.jpg" },
+            { src: "Caribbean Blue (2009 Remaster).mp3", title: "Caribbean Blue", artist: "Enya", duration: "3:58", cover: "https://akamai.sscdn.co/letras/360x360/albuns/f/0/9/2/452431438719015.jpg" },
+            { src: "Tate McRae, Flo Milli - bloodonmyhands (audio).mp3", title: "Bloodonmyhands", artist: "Tate McRae ft. Flo Milli", duration: "2:45", cover: "https://akamai.sscdn.co/uploadfile/letras/fotos/2/3/b/7/23b7ce1b75e760329f77fc66306eac8d-tb4.jpg" },
+            { src: "Tate McRae - Dear god (Lyric Video).mp3", title: "Dear God", artist: "Tate McRae", duration: "3:10", cover: "https://akamai.sscdn.co/uploadfile/letras/fotos/2/3/b/7/23b7ce1b75e760329f77fc66306eac8d.jpg" },
+            { src: "Tate McRae - Revolving door.mp3", title: "Revolving Door", artist: "Tate McRae", duration: "2:55", cover: "https://m.media-amazon.com/images/M/MV5BYTU3MjQzYzktODA1Ni00ZjI0LWFmNGEtZGJkNDVjOTBmODA5XkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg" },
+            { src: "Laura Pausini - Inolvidable (audio).mp3", title: "Inolvidable", artist: "Laura Pausini", duration: "3:48", cover: "https://images.genius.com/c7d74eac9e77f7327f71bf21229f3662.600x585x1.jpg" },
+            { src: "Kehlani - After Hours [Official Audio].mp3", title: "Afters Hours", artist: "Kehlani", duration: "3:22", cover: "https://images.genius.com/f782bde1e2e6dbd269ad85bc6b5b16ff.1000x1000x1.png" },
+            { src: "Folded.mp3", title: "Folded", artist: "Kehlani", duration: "2:40", cover: "https://i1.sndcdn.com/artworks-PQ07e23FXjVY2Qzb-kJvUvg-t500x500.jpg" },
+            { src: "Lejos de Ti.mp3", title: "Lejos de Ti", artist: "The Marías", duration: "3:15", cover: "https://i.ytimg.com/vi/RpR8DDOK1r0/sddefault.jpg" },
+            { src: "OMAR COURTZ (((ousi))) - MUSA ELEVÁ (Visualizer) l PRIMERA MUSA.mp3", title: "Musaelevá", artist: "Omar Courtz", duration: "3:05", cover: "https://images.genius.com/5c5aa66520d885e35dca7767d286c9b6.1000x1000x1.png" },
+            { src: "KAROL G - Viajando Por El Mundo (Visualizer) ft. Manu Chao.mp3", title: "Viajando Por El Mundo", artist: "Karol G ft. Manu Chao", duration: "2:50", cover: "https://i1.sndcdn.com/artworks-OjGHYuVJPQbd7BVi-P60ekw-t500x500.png" },
+            { src: "ZOE - Soñé (Unplugged).mp3", title: "Soñé", artist: "ZOÉ", duration: "3:18", cover: "https://cdn-images.dzcdn.net/images/cover/8498486810fb5956153f175822b7b7d8/1900x1900-000000-80-0-0.jpg" },
+            { src: "Intocable.mp3", title: "Intocable", artist: "Aleks Syntek", duration: "3:40", cover: "https://images.genius.com/a5b82251c0e2fdae8d8f9975a3701d62.939x939x1.jpg" },
+            { src: "ASTN - Gotta Go My Own Way (Lyrics).mp3", title: "I Gotta Go My Own Way", artist: "ASTN", duration: "2:45", cover: "https://i1.sndcdn.com/artworks-l03N3yJkSu5M9XQ2-NoGbuA-t1080x1080.png" },
+            { src: "Tyla - Truth or Dare (Official Audio).mp3", title: "Truth or Dare", artist: "Tyla", duration: "3:10", cover: "https://i1.sndcdn.com/artworks-9RFsEtWJLlUkPIo2-ATwxyw-t1080x1080.jpg" },
+            { src: "Enjoy the Silence.mp3", title: "Enjoy The Silence", artist: "Depeche Mode", duration: "4:15", cover: "https://upload.wikimedia.org/wikipedia/en/7/73/DepecheModeEnjoyTheSilence.jpg" },
+            { src: "Rihanna - What's My Name_ ft. Drake (Audio).mp3", title: "What's My Name?", artist: "Rihanna Ft. Drake", duration: "4:23", cover: "https://upload.wikimedia.org/wikipedia/en/9/93/Rihanna_-_What%27s_My_Name.png" },
+            { src: "Vanessa Hudgens - Say Ok.mp3", title: "Say OK", artist: "Vanessa Hudgens", duration: "3:41", cover: "https://upload.wikimedia.org/wikipedia/en/6/6a/Sayok_europ.JPG" },
+            { src: "Billie Eilish - CHIHIRO (Official Lyric Video).mp3", title: "CHIHIRO", artist: "Billie Eilish", duration: "5:03", cover: "https://akamai.sscdn.co/uploadfile/letras/fotos/c/3/5/3/c3536a6c436d0dd65a500dfa8b6bd7fb.jpg" }
+        ];
+
+        const playerTitle = document.getElementById('player-title');
+        const playerArtist = document.getElementById('player-artist');
+        const playerCover = document.getElementById('player-cover');
+        const playPauseBtn = document.getElementById('play-pause-btn');
+        const progressBar = document.getElementById('progress-bar');
+        const currentTimeEl = document.getElementById('current-time');
+        const totalTimeEl = document.getElementById('total-time');
+        const playlistContainer = document.getElementById('playlist-container');
+
+        function init() {
+            renderPlaylist();
+            loadSong(0);
+            updateClock();
+            setInterval(updateClock, 1000);
+        }
+
+        function renderPlaylist() {
+            playlistContainer.innerHTML = '';
+            songs.forEach((song, index) => {
+                const isActive = index === currentSongIndex;
+                const div = document.createElement('div');
+                div.className = `song-row flex items-center p-2 mb-1 cursor-pointer ${isActive ? 'active' : ''}`;
+                div.innerHTML = `
+                    <div class="w-8 flex justify-center text-[10px] font-mono text-[var(--gold-dark)]">
+                        ${isActive && isPlaying ? '<div class="equalizer"><div class="bar"></div><div class="bar"></div><div class="bar"></div></div>' : (index + 1)}
+                    </div>
+                    <img src="${song.cover}" class="w-8 h-8 rounded mx-2 object-cover border border-white/5">
+                    <div class="flex-1 overflow-hidden text-left">
+                        <div class="text-[11px] font-bold truncate ${isActive ? 'text-[var(--gold-primary)]' : 'text-white'}">${song.title}</div>
+                        <div class="text-[9px] text-gray-500 truncate">${song.artist}</div>
+                    </div>
+                    <div class="text-[9px] text-gray-500 font-mono pr-2">${song.duration}</div>
+                `;
+                div.onclick = () => playSong(index);
+                playlistContainer.appendChild(div);
+            });
+        }
+
+        function loadSong(index) {
+            currentSongIndex = index;
+            const song = songs[index];
+            playerTitle.textContent = song.title;
+            playerArtist.textContent = song.artist;
+            playerCover.src = song.cover;
+            audio.src = song.src;
+            audio.load();
+        }
+
+        function playSong(index) {
+            if (index !== currentSongIndex) {
+                loadSong(index);
+            }
+            audio.play();
+            isPlaying = true;
+            updateUI();
+        }
+
+        function togglePlay() {
+            if (isPlaying) {
+                audio.pause();
+                isPlaying = false;
+            } else {
+                audio.play();
+                isPlaying = true;
+            }
+            updateUI();
+        }
+
+        function prevSong() {
+            currentSongIndex = (currentSongIndex - 1 + songs.length) % songs.length;
+            playSong(currentSongIndex);
+        }
+
+        function nextSong() {
+            currentSongIndex = (currentSongIndex + 1) % songs.length;
+            playSong(currentSongIndex);
+        }
+
+        function updateUI() {
+            playPauseBtn.innerHTML = isPlaying ? '<i class="fas fa-pause text-xs"></i>' : '<i class="fas fa-play text-xs ml-0.5"></i>';
+            renderPlaylist();
+        }
+
+        audio.addEventListener('timeupdate', () => {
+            const { currentTime, duration } = audio;
+            if (isNaN(duration)) return;
+            progressBar.value = (currentTime / duration) * 100;
+            currentTimeEl.textContent = formatTime(currentTime);
+            totalTimeEl.textContent = formatTime(duration);
+        });
+
+        audio.addEventListener('ended', nextSong);
+
+        progressBar.addEventListener('input', () => {
+            if (audio.duration) {
+                audio.currentTime = (progressBar.value / 100) * audio.duration;
+            }
+        });
+
+        function toggleOverlay(id) {
+            const overlays = document.querySelectorAll('.overlay-panel');
+            const target = document.getElementById(id);
+            const isActive = target.classList.contains('active');
+            overlays.forEach(o => o.classList.remove('active'));
+            if (!isActive) target.classList.add('active');
+        }
+
+        function closeAllOverlays() {
+            document.querySelectorAll('.overlay-panel').forEach(o => o.classList.remove('active'));
+        }
+
+        function updateClock() {
+            const now = new Date();
+            document.getElementById('clock-display').textContent = now.getHours().toString().padStart(2, '0') + ":" + now.getMinutes().toString().padStart(2, '0');
+        }
+
+        function formatTime(sec) {
+            const m = Math.floor(sec / 60);
+            const s = Math.floor(sec % 60);
+            return `${m}:${s < 10 ? '0' : ''}${s}`;
+        }
+
+        init();
+    </script>
+</body>
+</html>
