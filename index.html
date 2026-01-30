@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SHAMPUc</title>
+    <title>SHAMPU</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Inter:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -31,7 +31,7 @@
             -webkit-user-select: none;
         }
 
-        /* Contenedor móvil - Tamaño Fijo Original */
+        /* Contenedor móvil - Tamaño Fijo */
         .mobile-frame {
             width: 100%;
             max-width: 900px;
@@ -46,7 +46,6 @@
             border: 8px solid #1a1a1a;
         }
 
-        /* Decoración de engranaje de fondo */
         .bg-gear {
             position: absolute;
             top: -50px;
@@ -63,7 +62,7 @@
             to { transform: rotate(360deg); }
         }
 
-        /* Personaje Principal Estático con Glow */
+        /* Personaje Principal Estático */
         .main-char-container {
             position: absolute;
             bottom: 0;
@@ -83,7 +82,6 @@
             object-fit: contain;
             object-position: bottom;
             filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.6)) drop-shadow(15px 0 25px rgba(0,0,0,0.9));
-            /* Sin animación de movimiento */
         }
 
         /* Nombre SHAMPU */
@@ -103,7 +101,6 @@
             to { background-position: 200% center; }
         }
 
-        /* Efecto ECUAGOD */
         @keyframes flag-rotation {
             0%, 33% { color: #FFCC00; }
             34%, 66% { color: #003399; }
@@ -120,7 +117,6 @@
             border: 1px solid rgba(212, 175, 55, 0.2);
         }
 
-        /* App Container */
         .app-container {
             flex: 1;
             margin-left: 38%; 
@@ -163,7 +159,6 @@
             border-left: 3px solid var(--gold-primary);
         }
 
-        /* Overlays */
         .overlay-panel {
             position: absolute;
             z-index: 100;
@@ -185,11 +180,9 @@
 
         #overlay-about { top: 80px; left: 50%; transform: translateX(-50%) translateY(20px); width: 420px; }
         #overlay-about.active { transform: translateX(-50%) translateY(0); }
-        
-        #overlay-gallery { top: 80px; right: 40px; width: 400px; }
+        #overlay-gallery { top: 80px; right: 40px; width: 380px; }
         #overlay-friends { top: 0; right: 0; height: 100%; width: 280px; border-radius: 0 32px 32px 0; }
 
-        /* Ecualizador */
         .equalizer {
             display: flex;
             align-items: flex-end;
@@ -203,7 +196,6 @@
             transition: height 0.1s ease;
         }
 
-        /* Barra de progreso estilo Spotify */
         .progress-container {
             flex: 1;
             height: 4px;
@@ -221,7 +213,6 @@
             transition: width 0.1s linear;
         }
 
-        /* Barra iPhone */
         .bottom-home-bar {
             position: absolute;
             bottom: 8px;
@@ -306,7 +297,6 @@
                     </div>
                 </div>
             </div>
-            
             <div class="grid grid-cols-3 gap-3">
                 <div class="bg-blue-900/40 p-4 rounded-xl border border-[var(--gold-dark)]/30 text-left">
                     <span class="text-[10px] text-[var(--gold-primary)] uppercase font-bold block mb-1">Edad</span>
@@ -321,7 +311,6 @@
                     <span class="text-xs text-white font-semibold">Sagitario ♐</span>
                 </div>
             </div>
-            
             <button onclick="closeAllOverlays()" class="absolute top-2 right-2 text-gray-500 hover:text-white text-lg">×</button>
         </div>
 
@@ -416,26 +405,26 @@
         let audioCtx, analyser, source, dataArray, visualizerInitialized = false;
 
         const songs = [
-            { src: "SEVDALIZA - NO ME CANSARE FT. KAROL G (BORN 2B AN ANGEL) [OFFICIAL LYRIC VIDEO].mp3", title: "No Me Cansaré", artist: "Sevdaliza ft. Karol G", duration: "3:12", cover: "https://images.genius.com/7c40813f489791519d37e1652ac3b552.300x300x1.png" },
-            { src: "dANCE IN THE DARK.mp3", title: "Dance In The Dark", artist: "Lady Gaga", duration: "4:49", cover: "https://i.ytimg.com/vi/-SBmJvwiDns/mqdefault.jpg" },
-            { src: "Caribbean Blue (2009 Remaster).mp3", title: "Caribbean Blue", artist: "Enya", duration: "3:58", cover: "https://akamai.sscdn.co/letras/360x360/albuns/f/0/9/2/452431438719015.jpg" },
-            { src: "Tate McRae, Flo Milli - bloodonmyhands (audio).mp3", title: "Bloodonmyhands", artist: "Tate McRae ft. Flo Milli", duration: "2:45", cover: "https://akamai.sscdn.co/uploadfile/letras/fotos/2/3/b/7/23b7ce1b75e760329f77fc66306eac8d-tb4.jpg" },
-            { src: "Tate McRae - Dear god (Lyric Video).mp3", title: "Dear God", artist: "Tate McRae", duration: "3:10", cover: "https://akamai.sscdn.co/uploadfile/letras/fotos/2/3/b/7/23b7ce1b75e760329f77fc66306eac8d.jpg" },
-            { src: "Tate McRae - Revolving door.mp3", title: "Revolving Door", artist: "Tate McRae", duration: "2:55", cover: "https://m.media-amazon.com/images/M/MV5BYTU3MjQzYzktODA1Ni00ZjI0LWFmNGEtZGJkNDVjOTBmODA5XkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg" },
-            { src: "Laura Pausini - Inolvidable (audio).mp3", title: "Inolvidable", artist: "Laura Pausini", duration: "3:48", cover: "https://images.genius.com/c7d74eac9e77f7327f71bf21229f3662.600x585x1.jpg" },
-            { src: "Kehlani - After Hours [Official Audio].mp3", title: "Afters Hours", artist: "Kehlani", duration: "3:22", cover: "https://images.genius.com/f782bde1e2e6dbd269ad85bc6b5b16ff.1000x1000x1.png" },
-            { src: "Folded.mp3", title: "Folded", artist: "Kehlani", duration: "2:40", cover: "https://i1.sndcdn.com/artworks-PQ07e23FXjVY2Qzb-kJvUvg-t500x500.jpg" },
-            { src: "Lejos de Ti.mp3", title: "Lejos de Ti", artist: "The Marías", duration: "3:15", cover: "https://i.ytimg.com/vi/RpR8DDOK1r0/sddefault.jpg" },
-            { src: "OMAR COURTZ (((ousi))) - MUSA ELEVÁ (Visualizer) l PRIMERA MUSA.mp3", title: "Musaelevá", artist: "Omar Courtz", duration: "3:05", cover: "https://images.genius.com/5c5aa66520d885e35dca7767d286c9b6.1000x1000x1.png" },
-            { src: "KAROL G - Viajando Por El Mundo (Visualizer) ft. Manu Chao.mp3", title: "Viajando Por El Mundo", artist: "Karol G ft. Manu Chao", duration: "2:50", cover: "https://i1.sndcdn.com/artworks-OjGHYuVJPQbd7BVi-P60ekw-t500x500.png" },
-            { src: "ZOE - Soñé (Unplugged).mp3", title: "Soñé", artist: "ZOÉ", duration: "3:18", cover: "https://cdn-images.dzcdn.net/images/cover/8498486810fb5956153f175822b7b7d8/1900x1900-000000-80-0-0.jpg" },
-            { src: "Intocable.mp3", title: "Intocable", artist: "Aleks Syntek", duration: "3:40", cover: "https://images.genius.com/a5b82251c0e2fdae8d8f9975a3701d62.939x939x1.jpg" },
-            { src: "ASTN - Gotta Go My Own Way (Lyrics).mp3", title: "I Gotta Go My Own Way", artist: "ASTN", duration: "2:45", cover: "https://i1.sndcdn.artworks-l03N3yJkSu5M9XQ2-NoGbuA-t1080x1080.png" },
-            { src: "Tyla - Truth or Dare (Official Audio).mp3", title: "Truth or Dare", artist: "Tyla", duration: "3:10", cover: "https://i1.sndcdn.artworks-9RFsEtWJLlUkPIo2-ATwxyw-t1080x1080.jpg" },
-            { src: "Enjoy the Silence.mp3", title: "Enjoy The Silence", artist: "Depeche Mode", duration: "4:15", cover: "https://upload.wikimedia.org/wikipedia/en/7/73/DepecheModeEnjoyTheSilence.jpg" },
-            { src: "Rihanna - What's My Name_ ft. Drake (Audio).mp3", title: "What's My Name?", artist: "Rihanna Ft. Drake", duration: "4:23", cover: "https://upload.wikimedia.org/wikipedia/en/9/93/Rihanna_-_What%27s_My_Name.png" },
-            { src: "Vanessa Hudgens - Say Ok.mp3", title: "Say OK", artist: "Vanessa Hudgens", duration: "3:41", cover: "https://upload.wikimedia.org/wikipedia/en/6/6a/Sayok_europ.JPG" },
-            { src: "Billie Eilish - CHIHIRO (Official Lyric Video).mp3", title: "CHIHIRO", artist: "Billie Eilish", duration: "5:03", cover: "https://akamai.sscdn.co/uploadfile/letras/fotos/c/3/5/3/c3536a6c436d0dd65a500dfa8b6bd7fb.jpg" }
+            { src: "SEVDALIZA - NO ME CANSARE FT. KAROL G (BORN 2B AN ANGEL) [OFFICIAL LYRIC VIDEO].mp3", title: "No Me Cansaré", artist: "Sevdaliza ft. Karol G", duration: "3:12", cover: "Sham/assets/No Me Cansaré.png" },
+            { src: "dANCE IN THE DARK.mp3", title: "Dance In The Dark", artist: "Lady Gaga", duration: "4:49", cover: "Sham/assets/Dance In The Dark.jpg" },
+            { src: "Caribbean Blue (2009 Remaster).mp3", title: "Caribbean Blue", artist: "Enya", duration: "3:58", cover: "Sham/assets/Caribbean Blue.avif" },
+            { src: "Tate McRae, Flo Milli - bloodonmyhands (audio).mp3", title: "Bloodonmyhands", artist: "Tate McRae ft. Flo Milli", duration: "2:45", cover: "Sham/assets/Bloodonmyhands.avif" },
+            { src: "Tate McRae - Dear god (Lyric Video).mp3", title: "Dear God", artist: "Tate McRae", duration: "3:10", cover: "Sham/assets/Dear God.avif" },
+            { src: "Tate McRae - Revolving door.mp3", title: "Revolving Door", artist: "Tate McRae", duration: "2:55", cover: "Sham/assets/Revolving Door.jpg" },
+            { src: "Laura Pausini - Inolvidable (audio).mp3", title: "Inolvidable", artist: "Laura Pausini", duration: "3:48", cover: "Sham/assets/Inolvidable.jpg" },
+            { src: "Kehlani - After Hours [Official Audio].mp3", title: "Afters Hours", artist: "Kehlani", duration: "3:22", cover: "Sham/assets/Afters Hours.png" },
+            { src: "Folded.mp3", title: "Folded", artist: "Kehlani", duration: "2:40", cover: "Sham/assets/Folded.jpg" },
+            { src: "Lejos de Ti.mp3", title: "Lejos de Ti", artist: "The Marías", duration: "3:15", cover: "Sham/assets/Lejos de Ti.jpg" },
+            { src: "OMAR COURTZ (((ousi))) - MUSA ELEVÁ (Visualizer) l PRIMERA MUSA.mp3", title: "Musaelevá", artist: "Omar Courtz", duration: "3:05", cover: "Sham/assets/Musaelevá.png" },
+            { src: "KAROL G - Viajando Por El Mundo (Visualizer) ft. Manu Chao.mp3", title: "Viajando Por El Mundo", artist: "Karol G ft. Manu Chao", duration: "2:50", cover: "Sham/assets/Viajando Por El Mundo.jpeg" },
+            { src: "ZOE - Soñé (Unplugged).mp3", title: "Soñé", artist: "ZOÉ", duration: "3:18", cover: "Sham/assets/Soñé.jpg" },
+            { src: "Intocable.mp3", title: "Intocable", artist: "Aleks Syntek", duration: "3:40", cover: "Sham/assets/Intocable.jpeg" },
+            { src: "ASTN - Gotta Go My Own Way (Lyrics).mp3", title: "I Gotta Go My Own Way", artist: "ASTN", duration: "2:45", cover: "Sham/assets/I Gotta Go My Own Way.jpeg" },
+            { src: "Tyla - Truth or Dare (Official Audio).mp3", title: "Truth or Dare", artist: "Tyla", duration: "3:10", cover: "Sham/assets/Truth or Dare.jpg" },
+            { src: "Enjoy the Silence.mp3", title: "Enjoy The Silence", artist: "Depeche Mode", duration: "4:15", cover: "Sham/assets/Enjoy The Silence.png" },
+            { src: "Rihanna - What's My Name_ ft. Drake (Audio).mp3", title: "What's My Name?", artist: "Rihanna Ft. Drake", duration: "4:23", cover: "Sham/assets/Whats My Name.png" },
+            { src: "Vanessa Hudgens - Say Ok.mp3", title: "Say OK", artist: "Vanessa Hudgens", duration: "3:41", cover: "Sham/assets/Say OK.png" },
+            { src: "Billie Eilish - CHIHIRO (Official Lyric Video).mp3", title: "CHIHIRO", artist: "Billie Eilish", duration: "5:03", cover: "Sham/assets/CHIHIRO.avif" }
         ];
 
         const playerTitle = document.getElementById('player-title'), playerArtist = document.getElementById('player-artist');
@@ -504,14 +493,15 @@
         function playSong(index) {
             currentSongIndex = index; loadSong(index); initAudioVisualizer();
             if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
-            audio.play(); isPlaying = true; updateUI();
+            audio.play().catch(e => console.log("Play error:", e));
+            isPlaying = true; updateUI();
         }
 
         function togglePlay() {
             initAudioVisualizer();
             if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
             if (isPlaying) { audio.pause(); isPlaying = false; }
-            else { audio.play(); isPlaying = true; }
+            else { audio.play().catch(e => console.log("Play error:", e)); isPlaying = true; }
             updateUI();
         }
 
@@ -523,13 +513,17 @@
         }
 
         audio.addEventListener('timeupdate', () => {
+            if (isNaN(audio.duration)) return;
             const progress = (audio.currentTime / audio.duration) * 100;
             progressFill.style.width = progress + '%';
             currentTimeEl.textContent = formatTime(audio.currentTime);
             totalTimeEl.textContent = formatTime(audio.duration);
         });
+
         audio.addEventListener('ended', nextSong);
+
         progressContainer.addEventListener('click', (e) => {
+            if (isNaN(audio.duration)) return;
             const percentage = (e.clientX - progressContainer.getBoundingClientRect().left) / progressContainer.offsetWidth;
             audio.currentTime = percentage * audio.duration;
         });
@@ -541,6 +535,7 @@
             overlays.forEach(o => o.classList.remove('active'));
             if (!isActive) target.classList.add('active');
         }
+
         function closeAllOverlays() { document.querySelectorAll('.overlay-panel').forEach(o => o.classList.remove('active')); }
         function updateClock() {
             const now = new Date();
