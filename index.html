@@ -27,11 +27,12 @@
             margin: 0;
             overflow: hidden;
             color: white;
+            /* Protecciones básicas de selección */
             user-select: none;
             -webkit-user-select: none;
         }
 
-        /* Contenedor móvil - Tamaño Fijo */
+        /* Contenedor móvil - Tamaño Fijo 900x520 */
         .mobile-frame {
             width: 100%;
             max-width: 900px;
@@ -62,7 +63,7 @@
             to { transform: rotate(360deg); }
         }
 
-        /* Personaje Principal Estático */
+        /* Personaje Principal Estático con Glow */
         .main-char-container {
             position: absolute;
             bottom: 0;
@@ -84,7 +85,7 @@
             filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.6)) drop-shadow(15px 0 25px rgba(0,0,0,0.9));
         }
 
-        /* Nombre SHAMPU */
+        /* Título SHAMPU con padding para evitar recorte */
         .shampu-text {
             font-family: 'Playfair Display', serif;
             background: linear-gradient(90deg, var(--gold-dark), var(--gold-light), var(--gold-dark));
@@ -94,13 +95,14 @@
             animation: shine 4s linear infinite;
             letter-spacing: 4px;
             font-style: italic;
-            padding-right: 15px;
+            padding-right: 15px; 
         }
 
         @keyframes shine {
             to { background-position: 200% center; }
         }
 
+        /* Animación Tricolor ECUAGOD */
         @keyframes flag-rotation {
             0%, 33% { color: #FFCC00; }
             34%, 66% { color: #003399; }
@@ -117,6 +119,7 @@
             border: 1px solid rgba(212, 175, 55, 0.2);
         }
 
+        /* Contenedor de la Aplicación */
         .app-container {
             flex: 1;
             margin-left: 38%; 
@@ -159,6 +162,7 @@
             border-left: 3px solid var(--gold-primary);
         }
 
+        /* Paneles Overlays */
         .overlay-panel {
             position: absolute;
             z-index: 100;
@@ -183,6 +187,7 @@
         #overlay-gallery { top: 80px; right: 40px; width: 380px; }
         #overlay-friends { top: 0; right: 0; height: 100%; width: 280px; border-radius: 0 32px 32px 0; }
 
+        /* Ecualizador por Frecuencias */
         .equalizer {
             display: flex;
             align-items: flex-end;
@@ -196,6 +201,7 @@
             transition: height 0.1s ease;
         }
 
+        /* Barra de progreso estilo Spotify */
         .progress-container {
             flex: 1;
             height: 4px;
@@ -280,7 +286,7 @@
             </div>
         </div>
 
-        <!-- SOBRE MÍ -->
+        <!-- OVERLAY: SOBRE MÍ -->
         <div id="overlay-about" class="overlay-panel rounded-2xl p-6 text-white overflow-hidden">
             <div class="flex gap-4 items-center mb-6 border-b border-[var(--gold-dark)]/40 pb-5 text-left">
                 <div class="w-24 h-24 flex-shrink-0 rounded-lg border-2 border-[var(--gold-primary)] overflow-hidden shadow-lg">
@@ -297,6 +303,7 @@
                     </div>
                 </div>
             </div>
+            
             <div class="grid grid-cols-3 gap-3">
                 <div class="bg-blue-900/40 p-4 rounded-xl border border-[var(--gold-dark)]/30 text-left">
                     <span class="text-[10px] text-[var(--gold-primary)] uppercase font-bold block mb-1">Edad</span>
@@ -311,10 +318,11 @@
                     <span class="text-xs text-white font-semibold">Sagitario ♐</span>
                 </div>
             </div>
+            
             <button onclick="closeAllOverlays()" class="absolute top-2 right-2 text-gray-500 hover:text-white text-lg">×</button>
         </div>
 
-        <!-- CRUSHES -->
+        <!-- OVERLAY: CRUSHES -->
         <div id="overlay-gallery" class="overlay-panel rounded-2xl p-5 overflow-hidden">
             <div class="grid grid-cols-3 gap-x-2 gap-y-4 overflow-y-auto max-h-[350px] pr-1 custom-scroll overflow-x-hidden">
                 <div class="flex flex-col items-center gap-1 group">
@@ -357,7 +365,7 @@
             <button onclick="closeAllOverlays()" class="absolute top-2 right-2 text-gray-500 hover:text-white text-lg">×</button>
         </div>
 
-        <!-- ALIADOS -->
+        <!-- OVERLAY: ALIADOS -->
         <div id="overlay-friends" class="overlay-panel p-6 flex flex-col">
             <h3 class="text-[var(--gold-primary)] font-bold text-sm mb-6 uppercase tracking-widest border-b border-[var(--gold-dark)] pb-2 mt-12 text-right">ALIADOS</h3>
             <div class="flex flex-col gap-4 overflow-y-auto pr-2 friends-list">
@@ -393,10 +401,14 @@
     </div>
 
     <script>
-        // --- PROTECCIÓN ---
+        // --- SEGURIDAD ---
         document.addEventListener('contextmenu', e => e.preventDefault());
         document.addEventListener('keydown', function(e) {
-            if (e.keyCode == 123 || (e.ctrlKey && e.shiftKey && [73, 74, 67].includes(e.keyCode)) || (e.ctrlKey && [85, 83].includes(e.keyCode))) e.preventDefault();
+            // Deshabilitar F12, Ctrl+Shift+I/J/C, Ctrl+U, Ctrl+S
+            if (e.keyCode == 123 || (e.ctrlKey && e.shiftKey && [73, 74, 67].includes(e.keyCode)) || (e.ctrlKey && [85, 83].includes(e.keyCode))) {
+                e.preventDefault();
+                return false;
+            }
         });
 
         const audio = new Audio();
@@ -404,27 +416,28 @@
         let isPlaying = false, currentSongIndex = 0;
         let audioCtx, analyser, source, dataArray, visualizerInitialized = false;
 
+        // --- PLAYLIST DATA (Rutas de assets actualizadas) ---
         const songs = [
-            { src: "SEVDALIZA - NO ME CANSARE FT. KAROL G (BORN 2B AN ANGEL) [OFFICIAL LYRIC VIDEO].mp3", title: "No Me Cansaré", artist: "Sevdaliza ft. Karol G", duration: "3:12", cover: "Sham/assets/No Me Cansaré.png" },
-            { src: "dANCE IN THE DARK.mp3", title: "Dance In The Dark", artist: "Lady Gaga", duration: "4:49", cover: "Sham/assets/Dance In The Dark.jpg" },
-            { src: "Caribbean Blue (2009 Remaster).mp3", title: "Caribbean Blue", artist: "Enya", duration: "3:58", cover: "Sham/assets/Caribbean Blue.avif" },
-            { src: "Tate McRae, Flo Milli - bloodonmyhands (audio).mp3", title: "Bloodonmyhands", artist: "Tate McRae ft. Flo Milli", duration: "2:45", cover: "Sham/assets/Bloodonmyhands.avif" },
-            { src: "Tate McRae - Dear god (Lyric Video).mp3", title: "Dear God", artist: "Tate McRae", duration: "3:10", cover: "Sham/assets/Dear God.avif" },
-            { src: "Tate McRae - Revolving door.mp3", title: "Revolving Door", artist: "Tate McRae", duration: "2:55", cover: "Sham/assets/Revolving Door.jpg" },
-            { src: "Laura Pausini - Inolvidable (audio).mp3", title: "Inolvidable", artist: "Laura Pausini", duration: "3:48", cover: "Sham/assets/Inolvidable.jpg" },
-            { src: "Kehlani - After Hours [Official Audio].mp3", title: "Afters Hours", artist: "Kehlani", duration: "3:22", cover: "Sham/assets/Afters Hours.png" },
-            { src: "Folded.mp3", title: "Folded", artist: "Kehlani", duration: "2:40", cover: "Sham/assets/Folded.jpg" },
-            { src: "Lejos de Ti.mp3", title: "Lejos de Ti", artist: "The Marías", duration: "3:15", cover: "Sham/assets/Lejos de Ti.jpg" },
-            { src: "OMAR COURTZ (((ousi))) - MUSA ELEVÁ (Visualizer) l PRIMERA MUSA.mp3", title: "Musaelevá", artist: "Omar Courtz", duration: "3:05", cover: "Sham/assets/Musaelevá.png" },
-            { src: "KAROL G - Viajando Por El Mundo (Visualizer) ft. Manu Chao.mp3", title: "Viajando Por El Mundo", artist: "Karol G ft. Manu Chao", duration: "2:50", cover: "Sham/assets/Viajando Por El Mundo.jpeg" },
-            { src: "ZOE - Soñé (Unplugged).mp3", title: "Soñé", artist: "ZOÉ", duration: "3:18", cover: "Sham/assets/Soñé.jpg" },
-            { src: "Intocable.mp3", title: "Intocable", artist: "Aleks Syntek", duration: "3:40", cover: "Sham/assets/Intocable.jpeg" },
-            { src: "ASTN - Gotta Go My Own Way (Lyrics).mp3", title: "I Gotta Go My Own Way", artist: "ASTN", duration: "2:45", cover: "Sham/assets/I Gotta Go My Own Way.jpeg" },
-            { src: "Tyla - Truth or Dare (Official Audio).mp3", title: "Truth or Dare", artist: "Tyla", duration: "3:10", cover: "Sham/assets/Truth or Dare.jpg" },
-            { src: "Enjoy the Silence.mp3", title: "Enjoy The Silence", artist: "Depeche Mode", duration: "4:15", cover: "Sham/assets/Enjoy The Silence.png" },
-            { src: "Rihanna - What's My Name_ ft. Drake (Audio).mp3", title: "What's My Name?", artist: "Rihanna Ft. Drake", duration: "4:23", cover: "Sham/assets/Whats My Name.png" },
-            { src: "Vanessa Hudgens - Say Ok.mp3", title: "Say OK", artist: "Vanessa Hudgens", duration: "3:41", cover: "Sham/assets/Say OK.png" },
-            { src: "Billie Eilish - CHIHIRO (Official Lyric Video).mp3", title: "CHIHIRO", artist: "Billie Eilish", duration: "5:03", cover: "Sham/assets/CHIHIRO.avif" }
+            { src: "SEVDALIZA - NO ME CANSARE FT. KAROL G (BORN 2B AN ANGEL) [OFFICIAL LYRIC VIDEO].mp3", title: "No Me Cansaré", artist: "Sevdaliza ft. Karol G", duration: "3:12", cover: "assets/No Me Cansaré.png" },
+            { src: "dANCE IN THE DARK.mp3", title: "Dance In The Dark", artist: "Lady Gaga", duration: "4:49", cover: "assets/Dance In The Dark.jpg" },
+            { src: "Caribbean Blue (2009 Remaster).mp3", title: "Caribbean Blue", artist: "Enya", duration: "3:58", cover: "assets/Caribbean Blue.avif" },
+            { src: "Tate McRae, Flo Milli - bloodonmyhands (audio).mp3", title: "Bloodonmyhands", artist: "Tate McRae ft. Flo Milli", duration: "2:45", cover: "assets/Bloodonmyhands.avif" },
+            { src: "Tate McRae - Dear god (Lyric Video).mp3", title: "Dear God", artist: "Tate McRae", duration: "3:10", cover: "assets/Dear God.avif" },
+            { src: "Tate McRae - Revolving door.mp3", title: "Revolving Door", artist: "Tate McRae", duration: "2:55", cover: "assets/Revolving Door.jpg" },
+            { src: "Laura Pausini - Inolvidable (audio).mp3", title: "Inolvidable", artist: "Laura Pausini", duration: "3:48", cover: "assets/Inolvidable.jpg" },
+            { src: "Kehlani - After Hours [Official Audio].mp3", title: "Afters Hours", artist: "Kehlani", duration: "3:22", cover: "assets/Afters Hours.png" },
+            { src: "Folded.mp3", title: "Folded", artist: "Kehlani", duration: "2:40", cover: "assets/Folded.jpg" },
+            { src: "Lejos de Ti.mp3", title: "Lejos de Ti", artist: "The Marías", duration: "3:15", cover: "assets/Lejos de Ti.jpg" },
+            { src: "OMAR COURTZ (((ousi))) - MUSA ELEVÁ (Visualizer) l PRIMERA MUSA.mp3", title: "Musaelevá", artist: "Omar Courtz", duration: "3:05", cover: "assets/Musaelevá.png" },
+            { src: "KAROL G - Viajando Por El Mundo (Visualizer) ft. Manu Chao.mp3", title: "Viajando Por El Mundo", artist: "Karol G ft. Manu Chao", duration: "2:50", cover: "assets/Viajando Por El Mundo.jpeg" },
+            { src: "ZOE - Soñé (Unplugged).mp3", title: "Soñé", artist: "ZOÉ", duration: "3:18", cover: "assets/Soñé.jpg" },
+            { src: "Intocable.mp3", title: "Intocable", artist: "Aleks Syntek", duration: "3:40", cover: "assets/Intocable.jpeg" },
+            { src: "ASTN - Gotta Go My Own Way (Lyrics).mp3", title: "I Gotta Go My Own Way", artist: "ASTN", duration: "2:45", cover: "assets/I Gotta Go My Own Way.jpeg" },
+            { src: "Tyla - Truth or Dare (Official Audio).mp3", title: "Truth or Dare", artist: "Tyla", duration: "3:10", cover: "assets/Truth or Dare.jpg" },
+            { src: "Enjoy the Silence.mp3", title: "Enjoy The Silence", artist: "Depeche Mode", duration: "4:15", cover: "assets/Enjoy The Silence.png" },
+            { src: "Rihanna - What's My Name_ ft. Drake (Audio).mp3", title: "What's My Name?", artist: "Rihanna Ft. Drake", duration: "4:23", cover: "assets/Whats My Name.png" },
+            { src: "Vanessa Hudgens - Say Ok.mp3", title: "Say OK", artist: "Vanessa Hudgens", duration: "3:41", cover: "assets/Say OK.png" },
+            { src: "Billie Eilish - CHIHIRO (Official Lyric Video).mp3", title: "CHIHIRO", artist: "Billie Eilish", duration: "5:03", cover: "assets/CHIHIRO.avif" }
         ];
 
         const playerTitle = document.getElementById('player-title'), playerArtist = document.getElementById('player-artist');
@@ -456,8 +469,12 @@
                 div.onclick = () => { if (index === currentSongIndex) togglePlay(); else playSong(index); };
                 playlistContainer.appendChild(div);
             });
+
+            // Auto-scroll dinámico
             const activeRow = document.getElementById('active-row');
-            if (activeRow) activeRow.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            if (activeRow) {
+                activeRow.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
         }
 
         function loadSong(index) {
@@ -524,8 +541,10 @@
 
         progressContainer.addEventListener('click', (e) => {
             if (isNaN(audio.duration)) return;
-            const percentage = (e.clientX - progressContainer.getBoundingClientRect().left) / progressContainer.offsetWidth;
-            audio.currentTime = percentage * audio.duration;
+            const rect = progressContainer.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const width = rect.width;
+            audio.currentTime = (x / width) * audio.duration;
         });
 
         function toggleOverlay(id) {
